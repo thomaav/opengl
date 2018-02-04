@@ -1,4 +1,7 @@
 #include <iostream>
+#include <cstring>
+#include <fstream>
+#include <sstream>
 
 #define GLFW_INCLUDE_NONE
 
@@ -45,6 +48,32 @@ const float vertices[] = {
 	0.0f, 0.5f, 0.0f,
 };
 
+bool load_shader_src(const std::string &filename, std::string &buf)
+{
+	std::ifstream f;
+	f.open(filename.c_str());
+
+	if (!f)
+		return false;
+
+	std::stringstream stream;
+	stream << f.rdbuf();
+	buf = stream.str();
+
+	f.close();
+	return true;
+}
+
+void shader_compilation_status(GLuint &shader)
+{
+	int success; char info_log[512];
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(shader, 512, NULL, info_log);
+		std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << info_log << std::endl;
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	GLFWwindow *main_window = init_simple_window();
@@ -54,8 +83,36 @@ int main(int argc, char *argv[])
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(main_window, fb_resize_cb);
 
-	// unsigned VBO;
-	// glGenBuffers(1, &VBO);
+	// ==== buffer for basic triangle object
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// ====
+
+	// ==== vertex shader
+	std::string vertex_shader_src;
+	load_shader_src("shaders/vertexshader.glsl", vertex_shader_src);
+	const char *vsc_c_str = vertex_shader_src.c_str();
+
+	GLuint vertex_shader;
+	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex_shader, 1, &vsc_c_str, NULL);
+	glCompileShader(vertex_shader);
+	shader_compilation_status(vertex_shader);
+	// ====
+
+	// ==== fragment shader
+	std::string fragment_shader_src;
+	load_shader_src("shaders/fragmentshader.glsl", fragment_shader_src);
+	const char *fsc_c_str = fragment_shader_src.c_str();
+
+	GLuint fragment_shader;
+	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment_shader, 1, &fsc_c_str, NULL);
+	glCompileShader(fragment_shader);
+	shader_compilation_status(fragment_shader);
+	// ====
 
 	while (!glfwWindowShouldClose(main_window)) {
 		// process all input
