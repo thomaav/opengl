@@ -66,15 +66,13 @@ int main(int argc, char *argv[])
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// change color of triangle using uniform in shaders,
-		// scale sin to only allow for [0.0f, 1.0f]
-		float time = glfwGetTime();
-		float color_value = sin(time) / 2.0f + 0.5f;
-		GLuint vertex_color_location = glGetUniformLocation(default_shader.get_program(), "cpu_color");
+		// float time = glfwGetTime();
+		// float color_value = sin(time) / 2.0f + 0.5f;
+		// GLuint vertex_color_location = glGetUniformLocation(default_shader.get_program(), "cpu_color");
 
 		default_shader.use();
 
-		glUniform4f(vertex_color_location, 0.0f, color_value, 0.0f, 1.0f);
+		// glUniform4f(vertex_color_location, 0.0f, color_value, 0.0f, 1.0f);
 
 		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
