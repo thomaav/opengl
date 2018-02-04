@@ -4,3 +4,4 @@ objects/*
 *.o
 *.obj
 *.wav
+opengl
