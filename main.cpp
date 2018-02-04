@@ -74,6 +74,16 @@ void shader_compilation_status(GLuint &shader)
 	}
 }
 
+void program_link_status(GLuint &program)
+{
+	int success; char info_log[512];
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(program, 512, NULL, info_log);
+		std::cout << "ERROR::PROGRAM::LINKING_FAILED\n" << info_log << std::endl;
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	GLFWwindow *main_window = init_simple_window();
@@ -112,6 +122,22 @@ int main(int argc, char *argv[])
 	glShaderSource(fragment_shader, 1, &fsc_c_str, NULL);
 	glCompileShader(fragment_shader);
 	shader_compilation_status(fragment_shader);
+	// ====
+
+	// ==== shader program
+	GLuint shader_program;
+	shader_program = glCreateProgram();
+
+	glAttachShader(shader_program, vertex_shader);
+	glAttachShader(shader_program, fragment_shader);
+
+	glLinkProgram(shader_program);
+	program_link_status(shader_program);
+
+	glDeleteShader(vertex_shader);
+	glDeleteShader(fragment_shader);
+
+	glUseProgram(shader_program);
 	// ====
 
 	while (!glfwWindowShouldClose(main_window)) {
