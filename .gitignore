@@ -1,4 +1,5 @@
 objects
+objects/*
 *.bin
 *.o
 *.obj

@@ -1,9 +1,10 @@
 CC=clang++
-CFLAGS=-Wall -std=c++11
-LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi
+CFLAGS=-Wall -std=c++11 -g
+LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
 
 OBJ_DIR=objects
 OBJS=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard *.cpp))
+OBJS+=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard glad/*.cpp))
 
 main.bin: $(OBJS)
 	${CC} ${CFLAGS} $^ ${LDLIBS} -o $@
