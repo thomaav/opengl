@@ -2,14 +2,14 @@
 
 #include "window.h"
 
-GLFWwindow *init_main_window(const unsigned width, const unsigned heigth)
+GLFWwindow *init_main_window(const unsigned width, const unsigned height)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow *window = glfwCreateWindow(800, 600, "~", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(width, height, "~", NULL, NULL);
 
 	if (!window) {
 		std::cout << "GLFW window creation failed; terminating" << std::endl;
@@ -20,7 +20,7 @@ GLFWwindow *init_main_window(const unsigned width, const unsigned heigth)
 	glfwMakeContextCurrent(window);
 	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
-	glViewport(0, 0, width, heigth);
+	glViewport(0, 0, width, height);
 	glfwSetFramebufferSizeCallback(window, fb_resize_cb);
 
 	return window;

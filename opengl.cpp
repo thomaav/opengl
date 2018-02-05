@@ -12,6 +12,9 @@
 #include "gltexture.h"
 #include "window.h"
 
+constexpr int width = 800;
+constexpr int height = 600;
+
 const float rectangle[] = {
 	0.5f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
 	0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
@@ -26,7 +29,7 @@ const unsigned indices[] = {
 
 int main(int argc, char *argv[])
 {
-	GLFWwindow *main_window = init_main_window(800, 600);
+	GLFWwindow *main_window = init_main_window(width, height);
 
 	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
 
@@ -70,6 +73,12 @@ int main(int argc, char *argv[])
 
 	glm::mat4 trans;
 
+	// let's go 3D
+	glm::mat4 model = glm::rotate(glm::mat4{}, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 view = glm::translate(glm::mat4{}, glm::vec3(0.0f, 0.0f, -3.0f));
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float) width / (float) height,
+						0.1f, 100.0f);
+
 	// unbind for good measure
 	glBindVertexArray(0);
 
@@ -82,6 +91,10 @@ int main(int argc, char *argv[])
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glBindVertexArray(VAO);
+
+		default_shader.set_mat4("model", model);
+		default_shader.set_mat4("view", view);
+		default_shader.set_mat4("projection", projection);
 
 		trans = glm::mat4{};
 		trans = glm::translate(trans, glm::vec3(-0.5f, -0.5f, 0.0f));
