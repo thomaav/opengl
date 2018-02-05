@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
 	container_texture.use(GL_TEXTURE0);
 	awesomeface_texture.use(GL_TEXTURE1);
 
+	glm::mat4 trans;
+
 	// unbind for good measure
 	glBindVertexArray(0);
 
@@ -79,13 +81,20 @@ int main(int argc, char *argv[])
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glm::mat4 trans;
+		glBindVertexArray(VAO);
+
+		trans = glm::mat4{};
 		trans = glm::translate(trans, glm::vec3(-0.5f, -0.5f, 0.0f));
 		trans = glm::rotate(trans, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		trans = glm::scale(trans, glm::vec3(1.0f, 1.0f, 1.0f));
 		default_shader.set_mat4("transform", trans);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		glBindVertexArray(VAO);
+		trans = glm::mat4{};
+		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+		trans = glm::rotate(trans, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::scale(trans, glm::vec3(1.0f, 1.0f, 1.0f));
+		default_shader.set_mat4("transform", trans);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// poll current events and swap the buffers
