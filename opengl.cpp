@@ -15,6 +15,10 @@
 constexpr int width = 800;
 constexpr int height = 600;
 
+glm::mat4 model;
+glm::mat4 view;
+glm::mat4 projection;
+
 const float rectangle[] = {
 	0.5f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
 	0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
@@ -74,9 +78,9 @@ int main(int argc, char *argv[])
 	glm::mat4 trans;
 
 	// let's go 3D
-	glm::mat4 model = glm::rotate(glm::mat4{}, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 view = glm::translate(glm::mat4{}, glm::vec3(0.0f, 0.0f, -3.0f));
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float) width / (float) height,
+	model = glm::rotate(glm::mat4{}, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	view = glm::translate(glm::mat4{}, glm::vec3(0.0f, 0.0f, -3.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float) width / (float) height,
 						0.1f, 100.0f);
 
 	// unbind for good measure
