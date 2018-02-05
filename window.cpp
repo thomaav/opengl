@@ -44,6 +44,8 @@ GLFWwindow *init_main_window(const unsigned width, const unsigned height)
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
+	glEnable(GL_DEPTH_TEST);
+
 	return window;
 }
 
