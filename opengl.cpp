@@ -4,6 +4,10 @@
 #include <sstream>
 #include <cmath>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "glshader.h"
 #include "gltexture.h"
 #include "window.h"
@@ -59,9 +63,8 @@ int main(int argc, char *argv[])
 	// ====
 
 	default_shader.use();
-	glUniform1i(glGetUniformLocation(default_shader.get_program(), "container_texture_sampler"), 0);
-	glUniform1i(glGetUniformLocation(default_shader.get_program(), "awesomeface_texture_sampler"), 1);
-
+	default_shader.set_int("container_texture_sampler", 0);
+	default_shader.set_int("awesomeface_texture_sampler", 1);
 	container_texture.use(GL_TEXTURE0);
 	awesomeface_texture.use(GL_TEXTURE1);
 
@@ -75,6 +78,12 @@ int main(int argc, char *argv[])
 		// rendering work
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glm::mat4 trans;
+		trans = glm::translate(trans, glm::vec3(-0.5f, -0.5f, 0.0f));
+		trans = glm::rotate(trans, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::scale(trans, glm::vec3(1.0f, 1.0f, 1.0f));
+		default_shader.set_mat4("transform", trans);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

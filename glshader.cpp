@@ -77,12 +77,24 @@ Shader::~Shader()
 		glDeleteProgram(program);
 }
 
-void Shader::use()
+void Shader::use() const
 {
 	glUseProgram(program);
 }
 
-GLuint Shader::get_program()
+GLuint Shader::get_program() const
 {
 	return program;
+}
+
+void Shader::set_int(const char *identifier, const int val) const
+{
+	GLuint location = glGetUniformLocation(program, identifier);
+	glUniform1i(location, val);
+}
+
+void Shader::set_mat4(const char *identifier, const glm::mat4 &mat) const
+{
+	GLuint location = glGetUniformLocation(program, identifier);
+	glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
 }

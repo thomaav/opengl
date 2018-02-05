@@ -20,4 +20,4 @@ clean:
 
 .PHONY: run
 run:
-	-make && ./opengl
+	+$(MAKE) $(MAKEFLAGS) && ./opengl
