@@ -15,6 +15,20 @@
 constexpr int width = 800;
 constexpr int height = 600;
 
+float mouse_speed = 0.001f;
+float speed = 0.05f;
+float horizontal_angle = 3.14f;
+float vertical_angle = 0.0f;
+float last_time;
+
+glm::vec3 direction(cos(vertical_angle) * sin(horizontal_angle),
+		    sin(vertical_angle),
+		    cos(vertical_angle) * cos(horizontal_angle));
+glm::vec3 right(sin(horizontal_angle - 3.14f / 2.0f), 0,
+		cos(horizontal_angle - 3.14f / 2.0f));
+glm::vec3 up = glm::cross(right, direction);
+glm::vec3 position(0.0f, 0.0f, 3.0f);
+
 glm::mat4 model;
 glm::mat4 view;
 glm::mat4 projection;
