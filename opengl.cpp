@@ -24,18 +24,13 @@ int main(int argc, char *argv[])
 {
 	GLFWwindow *main_window = init_main_window(800, 600);
 
-	// ==== shaders
 	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
-	// ====
 
-	// ==== textures
-	Texture container_texture{"textures/container.jpg"};
-	// ====
+	Texture container_texture{"textures/container.jpg", false};
+	Texture awesomeface_texture{"textures/awesomeface.png", true};
 
-	// ==== vertex array objects
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
-	// ====
 
 	// ==== buffers for basic rectangle object
 	GLuint VBO;
@@ -52,15 +47,23 @@ int main(int argc, char *argv[])
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	container_texture.use();
-
+	// positions
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
 	glEnableVertexAttribArray(0);
+	// colors
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	// texture coordinates
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	// ====
+
+	default_shader.use();
+	glUniform1i(glGetUniformLocation(default_shader.get_program(), "container_texture_sampler"), 0);
+	glUniform1i(glGetUniformLocation(default_shader.get_program(), "awesomeface_texture_sampler"), 1);
+
+	container_texture.use(GL_TEXTURE0);
+	awesomeface_texture.use(GL_TEXTURE1);
 
 	// unbind for good measure
 	glBindVertexArray(0);
@@ -72,14 +75,6 @@ int main(int argc, char *argv[])
 		// rendering work
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		// float time = glfwGetTime();
-		// float color_value = sin(time) / 2.0f + 0.5f;
-		// GLuint vertex_color_location = glGetUniformLocation(default_shader.get_program(), "cpu_color");
-
-		default_shader.use();
-
-		// glUniform4f(vertex_color_location, 0.0f, color_value, 0.0f, 1.0f);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
