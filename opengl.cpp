@@ -5,18 +5,19 @@
 #include <cmath>
 
 #include "glshader.h"
+#include "gltexture.h"
 #include "window.h"
 
-const float first_triangle[] = {
-	0.5f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f, // top right
-	0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f, // bottom right
-	-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f, // bottom left
+const float rectangle[] = {
+	0.5f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+	0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+	-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+	-0.5f, 0.5f, 0.0f,      1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
 };
 
-const float second_triangle[] = {
-	-0.5f, 0.5f, 0.0f,      1.0f, 0.0f, 0.0f, // top left
-	0.5f, 0.5f, 0.0f,       0.0f, 1.0f, 0.0f, // top right
-	-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f, // bottom left
+const unsigned indices[] = {
+	0, 1, 2,
+	0, 2, 3,
 };
 
 int main(int argc, char *argv[])
@@ -27,32 +28,38 @@ int main(int argc, char *argv[])
 	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
 	// ====
 
-	// ==== vertex array objects
-	GLuint VAOs[2];
-	glGenVertexArrays(2, VAOs);
+	// ==== textures
+	Texture container_texture{"textures/container.jpg"};
 	// ====
 
-	// ==== buffers for basic triangle objects
-	GLuint VBOs[2];
-	glGenBuffers(2, VBOs);
+	// ==== vertex array objects
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
+	// ====
 
-	// store first triangle in a VAO
-	glBindVertexArray(VAOs[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(first_triangle), first_triangle, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	// ==== buffers for basic rectangle object
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
 
-	// store second triangle in a VAO
-	glBindVertexArray(VAOs[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(second_triangle), second_triangle, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
+	GLuint EBO;
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rectangle), rectangle, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	container_texture.use();
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 	// ====
 
 	// unbind for good measure
@@ -74,19 +81,17 @@ int main(int argc, char *argv[])
 
 		// glUniform4f(vertex_color_location, 0.0f, color_value, 0.0f, 1.0f);
 
-		glBindVertexArray(VAOs[0]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glBindVertexArray(VAOs[1]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
 		glfwSwapBuffers(main_window);
 	}
 
-	glDeleteVertexArrays(2, VAOs);
-	glDeleteBuffers(2, VBOs);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 }

@@ -1,10 +1,13 @@
 #version 330 core
 uniform vec4 cpu_color;
+uniform sampler2D itexture;
+
 in vec3 vertex_color;
+in vec2 texture_coord;
 
 out vec4 fragment_color;
 
 void main()
 {
-	fragment_color = vec4(vertex_color, 1.0);
+	fragment_color = texture(itexture, texture_coord);
 }
