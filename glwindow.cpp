@@ -3,6 +3,8 @@
 
 #include "glwindow.h"
 
+void update_cubes(bool increment);
+
 namespace {
 	void fb_resize_cb(GLFWwindow *window, int width, int height)
 	{
@@ -13,6 +15,17 @@ namespace {
 	{
 		Window *owner = (Window *) glfwGetWindowUserPointer(window);
 		owner->update_fov(yoffset);
+	}
+
+	void click_cb(GLFWwindow *window, int button, int action, int mods)
+	{
+		if (!(action == GLFW_PRESS))
+			return;
+
+		if (button == GLFW_MOUSE_BUTTON_1)
+			update_cubes(true);
+		else if (button == GLFW_MOUSE_BUTTON_2)
+			update_cubes(false);
 	}
 }
 
@@ -38,6 +51,7 @@ Window::Window()
 	glViewport(0, 0, width, height);
 	glfwSetWindowUserPointer(window, this);
 	glfwSetFramebufferSizeCallback(window, fb_resize_cb);
+	glfwSetMouseButtonCallback(window, click_cb);
 	glfwSetScrollCallback(window, scroll_cb);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
