@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
 	Texture container_texture{"textures/container.jpg", false};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
+	Texture minecraft_texture{"textures/minecraft.png", false};
 
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
@@ -88,10 +89,8 @@ int main(int argc, char *argv[])
 	glEnableVertexAttribArray(1);
 
 	default_shader.use();
-	default_shader.set_int("container_texture_sampler", 0);
-	default_shader.set_int("awesomeface_texture_sampler", 1);
+	default_shader.set_int("minecraft_texture_sampler", 0);
 	container_texture.use(GL_TEXTURE0);
-	awesomeface_texture.use(GL_TEXTURE1);
 
 	// unbind for good measure
 	glBindVertexArray(0);
