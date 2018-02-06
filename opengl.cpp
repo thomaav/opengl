@@ -82,7 +82,7 @@ void update_cubes(bool increment)
 
 int main(int argc, char *argv[])
 {
-	Window main_window{};
+	Window main_window{true};
 
 	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
 	Texture container_texture{"textures/container.jpg", false};

@@ -19,7 +19,7 @@ public:
 	glm::mat4 view;
 	glm::mat4 projection;
 
-	Window();
+	Window(bool fullscreen = true);
 	~Window();
 
 	void process_input();

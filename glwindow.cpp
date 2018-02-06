@@ -29,7 +29,7 @@ namespace {
 	}
 }
 
-Window::Window()
+Window::Window(bool fullscreen)
 	: fov(45.0f)
 {
 	glfwInit();
@@ -37,7 +37,8 @@ Window::Window()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(width, height, "~", NULL, NULL);
+	GLFWmonitor *screen = fullscreen ? glfwGetPrimaryMonitor() : NULL;
+	window = glfwCreateWindow(width, height, "~", screen, NULL);
 
 	if (!window) {
 		std::cout << "GLFW window creation failed; terminating" << std::endl;
