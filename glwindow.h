@@ -12,8 +12,8 @@
 
 class Window {
 public:
-	const int width = 800;
-	const int height = 600;
+	const int width = 1920;
+	const int height = 1200;
 
 	glm::mat4 model;
 	glm::mat4 view;
