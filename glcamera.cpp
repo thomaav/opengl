@@ -39,6 +39,11 @@ void Camera::update_direction(GLFWwindow *window)
 	horizontal_angle += mouse_speed * delta_time * float(width / 2 - x);
 	vertical_angle += mouse_speed * delta_time * float(height / 2 - y);
 
+	if (vertical_angle > 1.57)
+		vertical_angle = 1.57;
+	if (vertical_angle < -1.57)
+		vertical_angle = -1.57;
+
 	direction.x = cos(vertical_angle) * sin(horizontal_angle);
 	direction.y = sin(vertical_angle);
 	direction.z = cos(vertical_angle) * cos(horizontal_angle);
