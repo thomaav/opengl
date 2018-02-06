@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 {
 	Window main_window{true};
 
-	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
+	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
 	Texture container_texture{"textures/container.jpg", false};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	default_shader.use();
-	default_shader.set_int("minecraft_texture_sampler", 0);
+	texture_shader.use();
+	texture_shader.set_int("container_texture_sampler", 0);
 	container_texture.use(GL_TEXTURE0);
 
 	//==== lighting VAO
@@ -138,25 +138,37 @@ int main(int argc, char *argv[])
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//==== default stuff
+		texture_shader.use();
+		texture_shader.set_mat4("view", main_window.view);
+		texture_shader.set_mat4("projection", main_window.projection);
+
 		glBindVertexArray(default_VAO);
 
-		default_shader.use();
-		default_shader.set_mat4("view", main_window.view);
-		default_shader.set_mat4("projection", main_window.projection);
+		texture_shader.set_int("container_texture_sampler", 0);
+		container_texture.use(GL_TEXTURE0);
+
+		texture_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
 
 		for (const auto position : cube_positions) {
 			main_window.reset_model();
 			main_window.translate_model(position);
 			main_window.rotate_model((float) glfwGetTime(), 0.0f, 0.0f, 1.0f);
-			default_shader.set_mat4("model", main_window.model);
+			texture_shader.set_mat4("model", main_window.model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		glBindVertexArray(lighting_VAO);
+		//==== lighting
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		lighting_shader.use();
 		lighting_shader.set_mat4("view", main_window.view);
 		lighting_shader.set_mat4("projection", main_window.projection);
+
+		glBindVertexArray(lighting_VAO);
+
+		lighting_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
+		lighting_shader.set_vec3("object_color", glm::vec3{1.0f, 1.0f, 1.0f});
 
 		main_window.reset_model();
 		main_window.translate_model(0.0f, 1.0f, 0.0f);
