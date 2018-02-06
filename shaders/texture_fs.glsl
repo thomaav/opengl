@@ -13,7 +13,7 @@ out vec4 fragment_color;
 void main()
 {
 	// ambient lighting
-	float ambient_strength = 0.15f;
+	float ambient_strength = 0.12f;
 	vec3 ambient_lighting = ambient_strength * light_color;
 
 	// diffuse lighting
@@ -23,7 +23,7 @@ void main()
 	vec3 diffuse_lighting = diff * light_color;
 
 	// specular lighting
-	float specular_strength = 0.5f;
+	float specular_strength = 0.9f;
 	vec3 norm_view_direction = normalize(camera_position - fragment_position);
 	vec3 norm_reflected_view_direction = reflect(-norm_light_direction, norm_normal);
 	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), 32);

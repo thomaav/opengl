@@ -67,6 +67,11 @@ void Camera::update_position(GLFWwindow *window)
 	float current_time = glfwGetTime();
 	float delta_time = current_time - last_time;
 
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		speed = 6.0f;
+	else
+		speed = 2.0f;
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		position += direction * delta_time * speed;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
