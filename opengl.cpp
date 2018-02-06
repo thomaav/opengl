@@ -80,6 +80,9 @@ void update_cubes(bool increment)
 	}
 }
 
+glm::vec3 light_color{1.0f, 1.0f, 1.0f};
+glm::vec3 light_position{0.0f, 1.0f, 0.0f};
+
 int main(int argc, char *argv[])
 {
 	Window main_window{true};
@@ -128,8 +131,6 @@ int main(int argc, char *argv[])
 	glBindBuffer(GL_ARRAY_BUFFER, lighting_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
 
-	glm::vec3 light_position{0.0f, 1.0f, 0.0f};
-
 	// positions
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
 	glEnableVertexAttribArray(0);
@@ -153,14 +154,14 @@ int main(int argc, char *argv[])
 		texture_shader.set_int("container_texture_sampler", 0);
 		container_texture.use(GL_TEXTURE0);
 
-		texture_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
+		texture_shader.set_vec3("light_color", light_color);
 		texture_shader.set_vec3("light_position", light_position);
 		texture_shader.set_vec3("camera_position", main_window.get_camera_position());
 
 		for (const auto position : cube_positions) {
 			main_window.reset_model();
 			main_window.translate_model(position);
-			// main_window.rotate_model((float) glfwGetTime(), 0.0f, 0.0f, 1.0f);
+			main_window.rotate_model((float) glfwGetTime(), 0.0f, 0.0f, 1.0f);
 			main_window.scale_model(0.5f);
 			texture_shader.set_mat4("model", main_window.model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -175,7 +176,7 @@ int main(int argc, char *argv[])
 
 		glBindVertexArray(lighting_VAO);
 
-		lighting_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
+		lighting_shader.set_vec3("light_color", light_color);
 		lighting_shader.set_vec3("object_color", glm::vec3{1.0f, 1.0f, 1.0f});
 
 		main_window.reset_model();

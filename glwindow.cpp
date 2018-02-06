@@ -5,6 +5,9 @@
 
 void update_cubes(bool increment);
 
+extern glm::vec3 light_color;
+extern glm::vec3 light_position;
+
 namespace {
 	void fb_resize_cb(GLFWwindow *window, int width, int height)
 	{
@@ -14,7 +17,7 @@ namespace {
 	void scroll_cb(GLFWwindow *window, double xoffset, double yoffset)
 	{
 		Window *owner = (Window *) glfwGetWindowUserPointer(window);
-		owner->update_fov(yoffset);
+		owner->update_lighting(yoffset);
 	}
 
 	void click_cb(GLFWwindow *window, int button, int action, int mods)
@@ -87,6 +90,20 @@ void Window::update_fov(double yoffset)
 	fov = fmin(max_fov, fov);
 
 	projection = glm::perspective(glm::radians(fov), (float) width / (float) height, 0.1f, 100.0f);
+}
+
+void Window::update_lighting(double yoffset)
+{
+	light_color.x += yoffset * 0.05f;
+	light_color.y += yoffset * 0.05f;
+	light_color.z += yoffset * 0.05f;
+
+	light_color.x = fmax(0.0f, light_color.x);
+	light_color.x = fmin(1.0f, light_color.x);
+	light_color.y = fmax(0.0f, light_color.y);
+	light_color.y = fmin(1.0f, light_color.y);
+	light_color.z = fmax(0.0f, light_color.z);
+	light_color.z = fmin(1.0f, light_color.z);
 }
 
 bool Window::should_close()

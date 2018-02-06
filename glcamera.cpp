@@ -1,3 +1,4 @@
+#include "glwindow.h"
 #include "glcamera.h"
 
 Camera::Camera()
@@ -64,6 +65,7 @@ void Camera::update_direction(GLFWwindow *window)
 
 void Camera::update_position(GLFWwindow *window)
 {
+	Window *owner = (Window *) glfwGetWindowUserPointer(window);
 	float current_time = glfwGetTime();
 	float delta_time = current_time - last_time;
 
@@ -80,6 +82,11 @@ void Camera::update_position(GLFWwindow *window)
 		position += right * delta_time * speed;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		position -= right * delta_time * speed;
+
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		owner->update_lighting(1.0f);
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		owner->update_lighting(-1.0f);
 }
 
 glm::mat4 Camera::view_mat4()
