@@ -11,7 +11,7 @@
 
 #include "glshader.h"
 #include "gltexture.h"
-#include "window.h"
+#include "glwindow.h"
 
 float cube[] = {
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,

@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "glcamera.h"
 
 Camera::Camera()
 	: mouse_speed(0.001f)

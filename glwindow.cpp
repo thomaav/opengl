@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "window.h"
+#include "glwindow.h"
 
 
 static void fb_resize_cb(GLFWwindow *window, int width, int height)
