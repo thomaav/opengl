@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 		texture_shader.set_int("container_texture_sampler", 0);
 		container_texture.use(GL_TEXTURE0);
 
-		texture_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
+		texture_shader.set_vec3("light_color", glm::vec3{1.0f, sin((float) glfwGetTime()) / 2.0f + 0.5f, 1.0f});
 
 		for (const auto position : cube_positions) {
 			main_window.reset_model();

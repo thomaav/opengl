@@ -1,8 +1,8 @@
 #include "glcamera.h"
 
 Camera::Camera()
-	: mouse_speed(0.0003f)
-	, speed(0.02f)
+	: mouse_speed(0.010f)
+	, speed(2.0f)
 	, horizontal_angle(3.14f)
 	, vertical_angle(0.0f)
 	, last_time(glfwGetTime())
@@ -23,6 +23,13 @@ Camera::Camera()
 Camera::~Camera()
 {
 	;
+}
+
+void Camera::update(GLFWwindow *window)
+{
+	update_direction(window);
+	update_position(window);
+	last_time = glfwGetTime();
 }
 
 void Camera::update_direction(GLFWwindow *window)

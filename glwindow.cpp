@@ -74,8 +74,7 @@ void Window::process_input()
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	camera.update_direction(window);
-	camera.update_position(window);
+	camera.update(window);
 	view = camera.view_mat4();
 }
 

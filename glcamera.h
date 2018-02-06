@@ -11,6 +11,7 @@ class Camera {
 public:
 	Camera();
 	~Camera();
+	void update(GLFWwindow *window);
 	void update_direction(GLFWwindow *window);
 	void update_position(GLFWwindow *window);
 	glm::mat4 view_mat4();
