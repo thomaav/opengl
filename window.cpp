@@ -1,34 +1,21 @@
 #include <iostream>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "window.h"
 
-extern float mouse_speed;
-extern float speed;
-extern float horizontal_angle;
-extern float vertical_angle;
-extern float last_time;
 
-extern glm::vec3 direction;
-extern glm::vec3 right;
-extern glm::vec3 up;
-extern glm::vec3 position;
+static void fb_resize_cb(GLFWwindow *window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
 
-extern glm::mat4 model;
-extern glm::mat4 view;
-extern glm::mat4 projection;
-
-GLFWwindow *init_main_window(const unsigned width, const unsigned height)
+Window::Window()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow *window = glfwCreateWindow(width, height, "~", NULL, NULL);
+	window = glfwCreateWindow(width, height, "~", NULL, NULL);
 
 	if (!window) {
 		std::cout << "GLFW window creation failed; terminating" << std::endl;
@@ -46,46 +33,32 @@ GLFWwindow *init_main_window(const unsigned width, const unsigned height)
 
 	glEnable(GL_DEPTH_TEST);
 
-	return window;
+	// initialize 3D world settings
+	view = glm::translate(glm::mat4{}, glm::vec3(0.0f, 0.0f, -3.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float) width / (float) height, 0.1f, 100.0f);
 }
 
-void fb_resize_cb(GLFWwindow *window, int width, int height)
+Window::~Window()
 {
-	glViewport(0, 0, width, height);
+	;
 }
 
-void process_input(GLFWwindow *window)
+void Window::process_input()
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	int width, height;
-	double x, y;
-	glfwGetCursorPos(window, &x, &y);
-	glfwGetWindowSize(window, &width, &height);
-	glfwSetCursorPos(window, width / 2, height / 2);
+	camera.update_direction(window);
+	camera.update_position(window);
+	view = camera.view_mat4();
+}
 
-	float current_time = glfwGetTime();
-	float delta_time = current_time - last_time;
+bool Window::should_close()
+{
+	return glfwWindowShouldClose(window);
+}
 
-	horizontal_angle += mouse_speed * delta_time * float(width / 2 - x);
-	vertical_angle += mouse_speed * delta_time * float(height / 2 - y);
-
-	direction = glm::vec3(cos(vertical_angle) * sin(horizontal_angle),
-			      sin(vertical_angle),
-			      cos(vertical_angle) * cos(horizontal_angle));
-	right = glm::vec3(sin(horizontal_angle - 3.14f / 2.0f), 0,
-			  cos(horizontal_angle - 3.14f / 2.0f));
-	up = glm::cross(right, direction);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		position += direction * delta_time * speed;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		position -= direction * delta_time * speed;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		position += right * delta_time * speed;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		position -= right * delta_time * speed;
-
-	view = glm::lookAt(position, position + direction, up);
+void Window::swap_buffers()
+{
+	glfwSwapBuffers(window);
 }
