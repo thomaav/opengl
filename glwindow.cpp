@@ -99,3 +99,38 @@ void Window::swap_buffers()
 {
 	glfwSwapBuffers(window);
 }
+
+void Window::reset_model()
+{
+	model = glm::mat4{};
+}
+
+void Window::translate_model(float x, float y, float z)
+{
+	model = glm::translate(model, glm::vec3{x, y, z});
+}
+
+void Window::translate_model(glm::vec3 translation)
+{
+	model = glm::translate(model, translation);
+}
+
+void Window::rotate_model(float radians, float x, float y, float z)
+{
+	model = glm::rotate(model, radians, glm::vec3{x, y, z});
+}
+
+void Window::rotate_model(float radians, glm::vec3 rotation)
+{
+	model = glm::rotate(model, radians, rotation);
+}
+
+void Window::scale_model(float x, float y, float z)
+{
+	model = glm::scale(model, glm::vec3{x, y, z});
+}
+
+void Window::scale_model(float scalar)
+{
+	model = glm::scale(model, glm::vec3(scalar, scalar, scalar));
+}

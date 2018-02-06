@@ -26,6 +26,17 @@ public:
 	void update_fov(double yoffset);
 	bool should_close();
 	void swap_buffers();
+
+	void reset_model();
+
+	void translate_model(float x, float y, float z);
+	void translate_model(glm::vec3 translation);
+
+	void rotate_model(float radians, float x, float y, float z);
+	void rotate_model(float radians, glm::vec3 rotation);
+
+	void scale_model(float x, float y, float z);
+	void scale_model(float scalar);
 private:
 	float fov;
 	const float max_fov = 60.0f;

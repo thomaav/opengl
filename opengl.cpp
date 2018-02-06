@@ -85,13 +85,21 @@ int main(int argc, char *argv[])
 	Window main_window{true};
 
 	Shader default_shader{"shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"};
+	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
 	Texture container_texture{"textures/container.jpg", false};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
 	Texture minecraft_texture{"textures/minecraft.png", false};
 
-	GLuint VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	GLuint default_VAO;
+	glGenVertexArrays(1, &default_VAO);
+	glBindVertexArray(default_VAO);
+
+	GLuint lighting_VAO;
+	glGenVertexArrays(1, &lighting_VAO);
+	glBindVertexArray(lighting_VAO);
+
+	//==== default VAO
+	glBindVertexArray(default_VAO);
 
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
@@ -109,7 +117,19 @@ int main(int argc, char *argv[])
 	default_shader.set_int("minecraft_texture_sampler", 0);
 	container_texture.use(GL_TEXTURE0);
 
-	// unbind for good measure
+	//==== lighting VAO
+	glBindVertexArray(lighting_VAO);
+
+	GLuint lighting_VBO;
+	glGenBuffers(1, &lighting_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, lighting_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+
+	// positions
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
+	glEnableVertexAttribArray(0);
+
+	//==== unbind for good measure
 	glBindVertexArray(0);
 
 	while (!main_window.should_close()) {
@@ -118,25 +138,39 @@ int main(int argc, char *argv[])
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBindVertexArray(VAO);
+		glBindVertexArray(default_VAO);
 
+		default_shader.use();
 		default_shader.set_mat4("view", main_window.view);
 		default_shader.set_mat4("projection", main_window.projection);
 
 		for (const auto position : cube_positions) {
-			main_window.model = glm::mat4{};
-			main_window.model = glm::translate(main_window.model, position);
-			main_window.model = glm::rotate(main_window.model, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+			main_window.reset_model();
+			main_window.translate_model(position);
+			main_window.rotate_model((float) glfwGetTime(), 0.0f, 0.0f, 1.0f);
 			default_shader.set_mat4("model", main_window.model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+
+		glBindVertexArray(lighting_VAO);
+
+		lighting_shader.use();
+		lighting_shader.set_mat4("view", main_window.view);
+		lighting_shader.set_mat4("projection", main_window.projection);
+
+		main_window.reset_model();
+		main_window.translate_model(0.0f, 1.0f, 0.0f);
+		main_window.scale_model(0.05f);
+		lighting_shader.set_mat4("model", main_window.model);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
 		main_window.swap_buffers();
 	}
 
-	glDeleteVertexArrays(1, &VAO);
+	glDeleteVertexArrays(1, &default_VAO);
 	glDeleteBuffers(1, &VBO);
 	// glDeleteBuffers(1, &EBO);
 
