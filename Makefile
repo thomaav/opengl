@@ -4,7 +4,7 @@ LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
 
 OBJ_DIR=objects
 OBJS=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard *.cpp))
-OBJS+=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard glad/*.cpp))
+OBJS+=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard lib/*.cpp))
 
 opengl: $(OBJS)
 	${CC} ${CFLAGS} $^ ${LDLIBS} -o $@
