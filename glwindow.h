@@ -37,6 +37,8 @@ public:
 
 	void scale_model(float x, float y, float z);
 	void scale_model(float scalar);
+
+	glm::vec3 get_camera_position();
 private:
 	float fov;
 	const float max_fov = 60.0f;

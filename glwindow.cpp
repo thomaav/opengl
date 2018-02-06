@@ -133,3 +133,8 @@ void Window::scale_model(float scalar)
 {
 	model = glm::scale(model, glm::vec3(scalar, scalar, scalar));
 }
+
+glm::vec3 Window::get_camera_position()
+{
+	return camera.get_position();
+}

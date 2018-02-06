@@ -17,7 +17,7 @@ Camera::Camera()
 
 	up = glm::cross(right, direction);
 
-	position = glm::vec3{0.0f, 0.0f, 3.0f};
+	position = glm::vec3{0.0f, 1.0f, 3.0f};
 }
 
 Camera::~Camera()
@@ -80,4 +80,9 @@ void Camera::update_position(GLFWwindow *window)
 glm::mat4 Camera::view_mat4()
 {
 	return glm::lookAt(position, position + direction, up);
+}
+
+glm::vec3 Camera::get_position()
+{
+	return position;
 }

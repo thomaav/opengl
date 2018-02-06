@@ -15,6 +15,6 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(vertex, 1.0);
 	texture_coord = texture_coord_in;
-	normal = normal_in;
+	normal = mat3(transpose(inverse(model))) * normal_in;
 	fragment_position = vec3(model * vec4(vertex, 1.0));
 }

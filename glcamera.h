@@ -15,6 +15,7 @@ public:
 	void update_direction(GLFWwindow *window);
 	void update_position(GLFWwindow *window);
 	glm::mat4 view_mat4();
+	glm::vec3 get_position();
 private:
 	float mouse_speed;
 	float speed;
