@@ -23,9 +23,14 @@ public:
 	~Window();
 
 	void process_input();
+	void update_fov(double yoffset);
 	bool should_close();
 	void swap_buffers();
 private:
+	float fov;
+	const float max_fov = 60.0f;
+	const float min_fov = 1.0f;
+
 	Camera camera;
 	GLFWwindow *window;
 };
