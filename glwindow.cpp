@@ -17,7 +17,7 @@ namespace {
 	void scroll_cb(GLFWwindow *window, double xoffset, double yoffset)
 	{
 		Window *owner = (Window *) glfwGetWindowUserPointer(window);
-		owner->update_lighting(yoffset);
+		owner->update_lighting(0.0f, yoffset);
 	}
 
 	void click_cb(GLFWwindow *window, int button, int action, int mods)
@@ -77,6 +77,20 @@ void Window::process_input()
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		update_lighting(0.0f, 1.0f);
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		update_lighting(0.0f, -1.0f);
+
+	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+		update_lighting('r', 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+		update_lighting('g', 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+		update_lighting('b', 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+		update_lighting('x', 0.0f);
+
 	camera.update(window);
 	view = camera.view_mat4();
 }
@@ -92,11 +106,32 @@ void Window::update_fov(double yoffset)
 	projection = glm::perspective(glm::radians(fov), (float) width / (float) height, 0.1f, 100.0f);
 }
 
-void Window::update_lighting(double yoffset)
+void Window::update_lighting(char color, double yoffset)
 {
-	light_color.x += yoffset * 0.05f;
-	light_color.y += yoffset * 0.05f;
-	light_color.z += yoffset * 0.05f;
+	if (yoffset) {
+		light_color.x += yoffset * 0.05f;
+		light_color.y += yoffset * 0.05f;
+		light_color.z += yoffset * 0.05f;
+	}
+
+	if (color) {
+		switch (color) {
+		case 'r':
+			light_color.x += 0.05f;
+			break;
+		case 'g':
+			light_color.y += 0.05f;
+			break;
+		case 'b':
+			light_color.z += 0.05f;
+			break;
+		case 'x':
+			light_color.x = light_color.y = light_color.z = 0.0f;
+			break;
+		default:
+			break;
+		}
+	}
 
 	light_color.x = fmax(0.0f, light_color.x);
 	light_color.x = fmin(1.0f, light_color.x);

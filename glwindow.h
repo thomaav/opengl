@@ -24,7 +24,7 @@ public:
 
 	void process_input();
 	void update_fov(double yoffset);
-	void update_lighting(double yoffset);
+	void update_lighting(char color, double yoffset);
 	bool should_close();
 	void swap_buffers();
 
