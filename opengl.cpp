@@ -13,6 +13,7 @@
 #include "gltexture.h"
 #include "glwindow.h"
 #include "glmaterial.h"
+#include "gllight.h"
 
 float cube[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
@@ -80,9 +81,6 @@ void update_cubes(bool increment)
 		}
 	}
 }
-
-glm::vec3 light_color{1.0f, 1.0f, 1.0f};
-glm::vec3 light_position{0.0f, 1.0f, 0.0f};
 
 bool use_texture = 1;
 
@@ -170,8 +168,10 @@ int main(int argc, char *argv[])
 		texture_shader.set_int("container_texture_sampler", 0);
 		container_texture.use(GL_TEXTURE0);
 
-		texture_shader.set_vec3("light_color", light_color);
-		texture_shader.set_vec3("light_position", light_position);
+		texture_shader.set_vec3("light.ambient", light.ambient);
+		texture_shader.set_vec3("light.diffuse", light.diffuse);
+		texture_shader.set_vec3("light.specular", light.specular);
+		texture_shader.set_vec3("light.position", light.position);
 		texture_shader.set_vec3("camera_position", main_window.get_camera_position());
 
 		for (const auto position : cube_positions) {
@@ -192,11 +192,11 @@ int main(int argc, char *argv[])
 
 		glBindVertexArray(lighting_VAO);
 
-		lighting_shader.set_vec3("light_color", light_color);
+		lighting_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
 		lighting_shader.set_vec3("object_color", glm::vec3{1.0f, 1.0f, 1.0f});
 
 		main_window.reset_model();
-		main_window.translate_model(light_position);
+		main_window.translate_model(light.position);
 		main_window.scale_model(0.05f);
 		lighting_shader.set_mat4("model", main_window.model);
 
