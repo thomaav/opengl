@@ -3,6 +3,7 @@ uniform sampler2D container_texture_sampler;
 uniform vec3 light_color;
 uniform vec3 light_position;
 uniform vec3 camera_position;
+uniform bool use_texture;
 
 in vec2 texture_coord;
 in vec3 normal;
@@ -29,6 +30,12 @@ void main()
 	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), 32);
 	vec3 specular_lighting = specular_strength * spec * light_color;
 
-	vec4 container_texture = texture(container_texture_sampler, texture_coord);
-	fragment_color = container_texture * vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
+	if (use_texture) {
+		vec4 container_texture = texture(container_texture_sampler, texture_coord);
+		vec4 total_lighting = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
+		fragment_color = container_texture * total_lighting;
+	} else {
+		vec4 object_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		fragment_color = object_color * vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
+	}
 }

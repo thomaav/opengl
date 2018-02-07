@@ -83,6 +83,8 @@ void update_cubes(bool increment)
 glm::vec3 light_color{1.0f, 1.0f, 1.0f};
 glm::vec3 light_position{0.0f, 1.0f, 0.0f};
 
+bool use_texture = 1;
+
 int main(int argc, char *argv[])
 {
 	Window main_window{true};
@@ -151,6 +153,7 @@ int main(int argc, char *argv[])
 
 		glBindVertexArray(default_VAO);
 
+		texture_shader.set_bool("use_texture", use_texture);
 		texture_shader.set_int("container_texture_sampler", 0);
 		container_texture.use(GL_TEXTURE0);
 

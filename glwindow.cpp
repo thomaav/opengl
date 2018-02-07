@@ -8,6 +8,8 @@ void update_cubes(bool increment);
 extern glm::vec3 light_color;
 extern glm::vec3 light_position;
 
+extern bool use_texture;
+
 namespace {
 	void fb_resize_cb(GLFWwindow *window, int width, int height)
 	{
@@ -29,6 +31,31 @@ namespace {
 			update_cubes(true);
 		else if (button == GLFW_MOUSE_BUTTON_2)
 			update_cubes(false);
+	}
+
+	void key_cb(GLFWwindow *window, int key, int scancode, int action, int mods)
+	{
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+			use_texture = !use_texture;
+	}
+
+	void change_lighting_dynamically(GLFWwindow *window)
+	{
+		Window *owner = (Window *) glfwGetWindowUserPointer(window);
+
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+			owner->update_lighting(0.0f, 1.0f);
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			owner->update_lighting(0.0f, -1.0f);
+
+		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+			owner->update_lighting('r', 0.0f);
+		if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+			owner->update_lighting('g', 0.0f);
+		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+			owner->update_lighting('b', 0.0f);
+		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+			owner->update_lighting('x', 0.0f);
 	}
 }
 
@@ -56,6 +83,7 @@ Window::Window(bool fullscreen)
 	glfwSetWindowUserPointer(window, this);
 	glfwSetFramebufferSizeCallback(window, fb_resize_cb);
 	glfwSetMouseButtonCallback(window, click_cb);
+	glfwSetKeyCallback(window, key_cb);
 	glfwSetScrollCallback(window, scroll_cb);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -77,20 +105,7 @@ void Window::process_input()
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		update_lighting(0.0f, 1.0f);
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		update_lighting(0.0f, -1.0f);
-
-	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
-		update_lighting('r', 0.0f);
-	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
-		update_lighting('g', 0.0f);
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-		update_lighting('b', 0.0f);
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-		update_lighting('x', 0.0f);
-
+	change_lighting_dynamically(window);
 	camera.update(window);
 	view = camera.view_mat4();
 }
