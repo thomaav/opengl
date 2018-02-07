@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
 	Texture container_diffuse{"textures/container2.png", true};
 	Texture container_specular{"textures/container2_specular.png", true};
+	Texture container_emission{"textures/container2_emission.jpg", false};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
 	Texture minecraft_texture{"textures/minecraft.png", false};
 
@@ -160,6 +161,9 @@ int main(int argc, char *argv[])
 
 		texture_shader.set_int("material.specular_lighting", 1);
 		container_specular.use(GL_TEXTURE1);
+
+		texture_shader.set_int("material.emission_lighting", 2);
+		container_emission.use(GL_TEXTURE2);
 
 		texture_shader.set_vec3("light.ambient", light.ambient);
 		texture_shader.set_vec3("light.diffuse", light.diffuse);
