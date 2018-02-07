@@ -1,5 +1,4 @@
 #version 330 core
-uniform sampler2D container_texture_sampler;
 uniform vec3 camera_position;
 uniform bool use_texture;
 
@@ -18,8 +17,7 @@ struct Light {
 };
 
 struct Material {
-	vec3 ambient_lighting;
-	vec3 diffuse_lighting;
+	sampler2D diffuse_lighting;
 	vec3 specular_lighting;
 	float shininess;
 };
@@ -30,13 +28,13 @@ uniform Light light;
 void main()
 {
 	// ambient lighting
-	vec3 ambient_lighting = material.ambient_lighting * light.ambient;
+	vec3 ambient_lighting = vec3(texture(material.diffuse_lighting, texture_coord)) * light.ambient;
 
 	// diffuse lighting
 	vec3 norm_normal = normalize(normal);
 	vec3 norm_light_direction = normalize(light.position - fragment_position);
 	float diff = max(dot(norm_normal, norm_light_direction), 0.0f);
-	vec3 diffuse_lighting = (diff * material.diffuse_lighting) * light.diffuse;
+	vec3 diffuse_lighting = vec3(texture(material.diffuse_lighting, texture_coord)) * diff * light.diffuse;
 
 	// specular lighting
 	vec3 norm_view_direction = normalize(camera_position - fragment_position);
@@ -45,9 +43,7 @@ void main()
 	vec3 specular_lighting = (material.specular_lighting * spec) * light.specular;
 
 	if (use_texture) {
-		vec4 container_texture = texture(container_texture_sampler, texture_coord);
-		vec4 total_lighting = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
-		fragment_color = container_texture * total_lighting;
+		fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
 	} else {
 		vec4 object_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		fragment_color = object_color * vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);

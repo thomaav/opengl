@@ -13,3 +13,4 @@ struct Material {
 
 extern Material texture;
 extern Material emerald;
+extern Material steel_container;

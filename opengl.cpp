@@ -57,6 +57,7 @@ float cube[] = {
 	0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
 	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+
 };
 
 float widest = 1.0;
@@ -90,7 +91,7 @@ int main(int argc, char *argv[])
 
 	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
-	Texture container_texture{"textures/container.jpg", false};
+	Texture container_texture{"textures/container2.png", true};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
 	Texture minecraft_texture{"textures/minecraft.png", false};
 
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
 	glEnableVertexAttribArray(2);
 
 	texture_shader.use();
-	texture_shader.set_int("container_texture_sampler", 0);
+	texture_shader.set_int("material.diffuse_lighting", 0);
 	container_texture.use(GL_TEXTURE0);
 
 	//==== lighting VAO
@@ -153,19 +154,15 @@ int main(int argc, char *argv[])
 		glBindVertexArray(default_VAO);
 
 		if (!use_texture) {
-			texture_shader.set_vec3("material.ambient_lighting", emerald.ambient_lighting);
-			texture_shader.set_vec3("material.diffuse_lighting", emerald.diffuse_lighting);
 			texture_shader.set_vec3("material.specular_lighting", emerald.specular_lighting);
 			texture_shader.set_float("material.shininess", emerald.shininess);
 		} else {
-			texture_shader.set_vec3("material.ambient_lighting", texture.ambient_lighting);
-			texture_shader.set_vec3("material.diffuse_lighting", texture.diffuse_lighting);
-			texture_shader.set_vec3("material.specular_lighting", texture.specular_lighting);
-			texture_shader.set_float("material.shininess", texture.shininess);
+			texture_shader.set_vec3("material.specular_lighting", steel_container.specular_lighting);
+			texture_shader.set_float("material.shininess", steel_container.shininess);
 		}
 
 		texture_shader.set_bool("use_texture", use_texture);
-		texture_shader.set_int("container_texture_sampler", 0);
+		texture_shader.set_int("material.diffuse_lighting", 0);
 		container_texture.use(GL_TEXTURE0);
 
 		texture_shader.set_vec3("light.ambient", light.ambient);
@@ -192,7 +189,7 @@ int main(int argc, char *argv[])
 
 		glBindVertexArray(lighting_VAO);
 
-		lighting_shader.set_vec3("light_color", glm::vec3{1.0f, 1.0f, 1.0f});
+		lighting_shader.set_vec3("light_color", light.ambient);
 		lighting_shader.set_vec3("object_color", glm::vec3{1.0f, 1.0f, 1.0f});
 
 		main_window.reset_model();
