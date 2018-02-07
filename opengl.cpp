@@ -68,6 +68,16 @@ std::vector<glm::vec3> cube_positions = {
 	glm::vec3(1.0f, 0.0f, 1.0f),
 };
 
+float ground[] = {
+	-1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+	1.0f, 0.0f, 1.0f,   30.0f, 0.0f,
+	1.0f, 0.0f, -1.0f,  30.0f, 30.0f,
+
+	-1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+	-1.0f, 0.0f, -1.0f, 0.0f, 30.0f,
+	1.0f, 0.0f, -1.0f,  30.0f, 30.0f,
+};
+
 void update_cubes(bool increment)
 {
 	if (increment) {
@@ -89,11 +99,13 @@ int main(int argc, char *argv[])
 
 	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
+	Shader ground_shader{"shaders/ground_vs.glsl", "shaders/ground_fs.glsl"};
 	Texture container_diffuse{"textures/container2.png", true};
 	Texture container_specular{"textures/container2_specular.png", true};
 	Texture container_emission{"textures/container2_emission.jpg", false};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
 	Texture minecraft_texture{"textures/minecraft.png", false};
+	Texture ground_texture{"textures/container.jpg", false};
 
 	GLuint default_VAO;
 	glGenVertexArrays(1, &default_VAO);
@@ -102,6 +114,10 @@ int main(int argc, char *argv[])
 	GLuint lighting_VAO;
 	glGenVertexArrays(1, &lighting_VAO);
 	glBindVertexArray(lighting_VAO);
+
+	GLuint ground_VAO;
+	glGenVertexArrays(1, &ground_VAO);
+	glBindVertexArray(ground_VAO);
 
 	//==== default VAO
 	glBindVertexArray(default_VAO);
@@ -121,10 +137,6 @@ int main(int argc, char *argv[])
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	texture_shader.use();
-	texture_shader.set_int("material.diffuse_lighting", 0);
-	container_diffuse.use(GL_TEXTURE0);
-
 	//==== lighting VAO
 	glBindVertexArray(lighting_VAO);
 
@@ -133,9 +145,22 @@ int main(int argc, char *argv[])
 	glBindBuffer(GL_ARRAY_BUFFER, lighting_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
 
-	// positions
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
 	glEnableVertexAttribArray(0);
+
+	//==== ground VAO
+	glBindVertexArray(ground_VAO);
+
+	GLuint ground_VBO;
+	glGenBuffers(1, &ground_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, ground_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ground), ground, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	//==== unbind for good measure
 	glBindVertexArray(0);
@@ -200,6 +225,28 @@ int main(int argc, char *argv[])
 		lighting_shader.set_mat4("model", main_window.model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		//==== ground
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		ground_shader.use();
+		ground_shader.set_mat4("view", main_window.view);
+		ground_shader.set_mat4("projection", main_window.projection);
+
+		glBindVertexArray(ground_VAO);
+
+		ground_shader.set_int("ground_texture", 0);
+		ground_texture.use(GL_TEXTURE0);
+
+		ground_shader.set_vec3("light_color", light.ambient);
+		ground_shader.set_vec3("object_color", glm::vec3{0.75f, 0.75f, 0.75f});
+
+		main_window.reset_model();
+		main_window.translate_model(0.0f, -1.0f, 0.0f);
+		main_window.scale_model(30.0f);
+		ground_shader.set_mat4("model", main_window.model);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
