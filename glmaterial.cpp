@@ -1,4 +1,4 @@
-#include "material.h"
+#include "glmaterial.h"
 
 Material texture = {
 	.ambient_lighting = glm::vec3{0.12f, 0.12f, 0.12f},
