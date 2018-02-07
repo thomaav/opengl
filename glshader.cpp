@@ -93,6 +93,18 @@ void Shader::set_int(const char *identifier, const int val) const
 	glUniform1i(location, val);
 }
 
+void Shader::set_float(const char *identifier, const float val) const
+{
+	GLuint location = glGetUniformLocation(program, identifier);
+	glUniform1f(location, val);
+}
+
+void Shader::set_bool(const char *identifier, const bool val) const
+{
+	GLuint location = glGetUniformLocation(program, identifier);
+	glUniform1i(location, val);
+}
+
 void Shader::set_4f(const char *identifier, float x, float y, float z, float w) const
 {
 	GLuint location = glGetUniformLocation(program, identifier);
@@ -109,10 +121,4 @@ void Shader::set_mat4(const char *identifier, const glm::mat4 &mat) const
 {
 	GLuint location = glGetUniformLocation(program, identifier);
 	glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
-}
-
-void Shader::set_bool(const char *identifier, const bool val) const
-{
-	GLuint location = glGetUniformLocation(program, identifier);
-	glUniform1i(location, val);
 }

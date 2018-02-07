@@ -153,6 +153,18 @@ int main(int argc, char *argv[])
 
 		glBindVertexArray(default_VAO);
 
+		if (!use_texture) {
+			texture_shader.set_vec3("material.ambient_lighting", glm::vec3{0.215, 0.1745, 0.0215});
+			texture_shader.set_vec3("material.diffuse_lighting", glm::vec3{0.07568, 0.61424, 0.07568});
+			texture_shader.set_vec3("material.specular_lighting", glm::vec3{0.633, 0.727811, 0.633});
+			texture_shader.set_float("material.shininess", 0.6f);
+		} else {
+			texture_shader.set_vec3("material.ambient_lighting", glm::vec3{0.12f, 0.12f, 0.12f});
+			texture_shader.set_vec3("material.diffuse_lighting", glm::vec3{1.0f, 1.0f, 1.0f});
+			texture_shader.set_vec3("material.specular_lighting", glm::vec3{0.9f, 0.9f, 0.9f});
+			texture_shader.set_float("material.shininess", 32.0f);
+		}
+
 		texture_shader.set_bool("use_texture", use_texture);
 		texture_shader.set_int("container_texture_sampler", 0);
 		container_texture.use(GL_TEXTURE0);

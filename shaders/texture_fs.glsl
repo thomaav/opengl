@@ -11,24 +11,31 @@ in vec3 fragment_position;
 
 out vec4 fragment_color;
 
+struct Material {
+	vec3 ambient_lighting;
+	vec3 diffuse_lighting;
+	vec3 specular_lighting;
+	float shininess;
+};
+
+uniform Material material;
+
 void main()
 {
 	// ambient lighting
-	float ambient_strength = 0.12f;
-	vec3 ambient_lighting = ambient_strength * light_color;
+	vec3 ambient_lighting = material.ambient_lighting * light_color;
 
 	// diffuse lighting
 	vec3 norm_normal = normalize(normal);
 	vec3 norm_light_direction = normalize(light_position - fragment_position);
 	float diff = max(dot(norm_normal, norm_light_direction), 0.0f);
-	vec3 diffuse_lighting = diff * light_color;
+	vec3 diffuse_lighting = (diff * material.diffuse_lighting) * light_color;
 
 	// specular lighting
-	float specular_strength = 0.9f;
 	vec3 norm_view_direction = normalize(camera_position - fragment_position);
 	vec3 norm_reflected_view_direction = reflect(-norm_light_direction, norm_normal);
-	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), 32);
-	vec3 specular_lighting = specular_strength * spec * light_color;
+	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), material.shininess);
+	vec3 specular_lighting = (material.specular_lighting * spec) * light_color;
 
 	if (use_texture) {
 		vec4 container_texture = texture(container_texture_sampler, texture_coord);
