@@ -171,6 +171,8 @@ int main(int argc, char *argv[])
 		texture_shader.set_vec3("light.position", light.position);
 		texture_shader.set_vec3("camera_position", main_window.get_camera_position());
 
+		texture_shader.set_float("time", glfwGetTime());
+
 		for (const auto position : cube_positions) {
 			main_window.reset_model();
 			main_window.translate_model(position);

@@ -24,6 +24,7 @@ struct Material {
 
 uniform Material material;
 uniform Light light;
+uniform float time;
 
 void main()
 {
@@ -46,8 +47,9 @@ void main()
 
 	if (vec3(texture(material.specular_lighting, texture_coord)).r == 0.0f) {
 		float distance_to_camera = length(camera_position - fragment_position);
-		float visibility = 1.0f * (1.0f - min(1.0f, (distance_to_camera / 3.0f)));
-		emission_lighting = vec3(texture(material.emission_lighting, texture_coord)) * visibility;
+		float visibility = 1.0f * (1.0f - min(1.0f, (distance_to_camera / 4.0f)));
+		vec3 emission_texture = vec3(texture(material.emission_lighting, texture_coord + vec2(0.0f, time)));
+		emission_lighting = emission_texture * visibility;
 	}
 
 	fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting + emission_lighting, 1.0f);
