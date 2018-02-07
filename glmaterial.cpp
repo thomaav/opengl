@@ -8,6 +8,5 @@ Material emerald = {
 };
 
 Material steel_container = {
-	.specular_lighting = glm::vec3{0.5f, 0.5f, 0.5f},
 	.shininess = 64.0f,
 };

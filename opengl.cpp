@@ -89,7 +89,8 @@ int main(int argc, char *argv[])
 
 	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
-	Texture container_texture{"textures/container2.png", true};
+	Texture container_diffuse{"textures/container2.png", true};
+	Texture container_specular{"textures/container2_specular.png", true};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
 	Texture minecraft_texture{"textures/minecraft.png", false};
 
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
 
 	texture_shader.use();
 	texture_shader.set_int("material.diffuse_lighting", 0);
-	container_texture.use(GL_TEXTURE0);
+	container_diffuse.use(GL_TEXTURE0);
 
 	//==== lighting VAO
 	glBindVertexArray(lighting_VAO);
@@ -155,7 +156,10 @@ int main(int argc, char *argv[])
 		texture_shader.set_float("material.shininess", steel_container.shininess);
 
 		texture_shader.set_int("material.diffuse_lighting", 0);
-		container_texture.use(GL_TEXTURE0);
+		container_diffuse.use(GL_TEXTURE0);
+
+		texture_shader.set_int("material.specular_lighting", 1);
+		container_specular.use(GL_TEXTURE1);
 
 		texture_shader.set_vec3("light.ambient", light.ambient);
 		texture_shader.set_vec3("light.diffuse", light.diffuse);
