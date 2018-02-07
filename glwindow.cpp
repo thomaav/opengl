@@ -46,6 +46,11 @@ namespace {
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 			owner->update_lighting(0.0f, -1.0f);
 
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			light.position.x += 0.05;
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			light.position.x -= 0.05;
+
 		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
 			owner->update_lighting('r', 0.0f);
 		if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
