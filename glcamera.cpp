@@ -81,6 +81,10 @@ void Camera::update_position(GLFWwindow *window)
 		position += right * delta_time * speed;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		position -= right * delta_time * speed;
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		position += up * delta_time * speed;
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+		position = glm::vec3{0.0f, 1.0f, 3.0f};
 }
 
 glm::mat4 Camera::view_mat4()
