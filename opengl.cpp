@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 	Texture container_emission{"textures/container2_emission.jpg", false};
 	Texture awesomeface_texture{"textures/awesomeface.png", true};
 	Texture minecraft_texture{"textures/minecraft.png", false};
-	Texture ground_texture{"textures/container.jpg", false};
+	Texture ground_texture{"textures/grass.png", false};
 
 	GLuint default_VAO;
 	glGenVertexArrays(1, &default_VAO);
@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
 
 		main_window.reset_model();
 		main_window.translate_model(0.0f, -1.0f, 0.0f);
-		main_window.scale_model(30.0f);
+		main_window.scale_model(10.0f);
 		ground_shader.set_mat4("model", main_window.model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
