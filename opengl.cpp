@@ -14,50 +14,114 @@
 #include "glwindow.h"
 #include "glmaterial.h"
 #include "gllight.h"
+#include "glmesh.h"
+
+std::vector<Vertex> cube_vertices = {
+	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{0.0f,  0.0f, -1.0f},    glm::vec2{0.0f, 0.0f} },
+	{ glm::vec3{0.5f, -0.5f, -0.5f},    glm::vec3{ 0.0f,  0.0f, -1.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{0.5f,  0.5f, -0.5f},    glm::vec3{ 0.0f,  0.0f, -1.0f},   glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{0.5f,  0.5f, -0.5f},    glm::vec3{ 0.0f,  0.0f, -1.0f},   glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{-0.5f,  0.5f, -0.5f},   glm::vec3{0.0f,  0.0f, -1.0f},    glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{0.0f,  0.0f, -1.0f},    glm::vec2{0.0f, 0.0f} },
+
+	{ glm::vec3{-0.5f, -0.5f,  0.5f},   glm::vec3{0.0f,  0.0f, 1.0f},     glm::vec2{0.0f, 0.0f} },
+	{ glm::vec3{0.5f, -0.5f,  0.5f},    glm::vec3{ 0.0f,  0.0f, 1.0f},    glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{0.5f,  0.5f,  0.5f},    glm::vec3{ 0.0f,  0.0f, 1.0f},    glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{0.5f,  0.5f,  0.5f},    glm::vec3{ 0.0f,  0.0f, 1.0f},    glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{-0.5f,  0.5f,  0.5f},   glm::vec3{0.0f,  0.0f, 1.0f},     glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{-0.5f, -0.5f,  0.5f},   glm::vec3{0.0f,  0.0f, 1.0f},     glm::vec2{0.0f, 0.0f} },
+
+	{ glm::vec3{-0.5f,  0.5f,  0.5f},   glm::vec3{-1.0f,  0.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{-0.5f,  0.5f, -0.5f},   glm::vec3{-1.0f,  0.0f,  0.0f},   glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{-1.0f,  0.0f,  0.0f},   glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{-1.0f,  0.0f,  0.0f},   glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{-0.5f, -0.5f,  0.5f},   glm::vec3{-1.0f,  0.0f,  0.0f},   glm::vec2{0.0f, 0.0f} },
+	{ glm::vec3{-0.5f,  0.5f,  0.5f},   glm::vec3{-1.0f,  0.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+
+	{ glm::vec3{0.5f,  0.5f,  0.5f},    glm::vec3{ 1.0f,  0.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{0.5f,  0.5f, -0.5f},    glm::vec3{ 1.0f,  0.0f,  0.0f},   glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{0.5f, -0.5f, -0.5f},    glm::vec3{ 1.0f,  0.0f,  0.0f},   glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{0.5f, -0.5f, -0.5f},    glm::vec3{ 1.0f,  0.0f,  0.0f},   glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{0.5f, -0.5f,  0.5f},    glm::vec3{ 1.0f,  0.0f,  0.0f},   glm::vec2{0.0f, 0.0f} },
+	{ glm::vec3{0.5f,  0.5f,  0.5f},    glm::vec3{ 1.0f,  0.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+
+	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{0.0f, -1.0f,  0.0f},    glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{0.5f, -0.5f, -0.5f},    glm::vec3{ 0.0f, -1.0f,  0.0f},   glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{0.5f, -0.5f,  0.5f},    glm::vec3{ 0.0f, -1.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{0.5f, -0.5f,  0.5f},    glm::vec3{ 0.0f, -1.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{-0.5f, -0.5f,  0.5f},   glm::vec3{0.0f, -1.0f,  0.0f},    glm::vec2{0.0f, 0.0f} },
+	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{0.0f, -1.0f,  0.0f},    glm::vec2{0.0f, 1.0f} },
+
+	{ glm::vec3{-0.5f,  0.5f, -0.5f},   glm::vec3{0.0f,  1.0f,  0.0f},    glm::vec2{0.0f, 1.0f} },
+	{ glm::vec3{0.5f,  0.5f, -0.5f},    glm::vec3{ 0.0f,  1.0f,  0.0f},   glm::vec2{1.0f, 1.0f} },
+	{ glm::vec3{0.5f,  0.5f,  0.5f},    glm::vec3{ 0.0f,  1.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{0.5f,  0.5f,  0.5f},    glm::vec3{ 0.0f,  1.0f,  0.0f},   glm::vec2{1.0f, 0.0f} },
+	{ glm::vec3{-0.5f,  0.5f,  0.5f},   glm::vec3{0.0f,  1.0f,  0.0f},    glm::vec2{0.0f, 0.0f} },
+	{ glm::vec3{-0.5f,  0.5f, -0.5f},   glm::vec3{0.0f, 1.0f, 0.0f},      glm::vec2{0.0f, 1.0f} },
+};
+
+std::vector<GLuint> cube_indices = {
+	0, 1, 2,
+	3, 4, 5,
+
+	6, 7, 8,
+	9, 10, 11,
+
+	12, 13, 14,
+	15, 16, 17,
+
+	18, 19, 20,
+	21, 22, 23,
+
+	24, 25, 26,
+	27, 28, 29,
+
+	30, 31, 32,
+	33, 34, 35,
+};
 
 float cube[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
-	0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f,  0.0f, -1.0f,
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f,  0.0f, -1.0f,
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
+       0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f,  0.0f, -1.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f,  0.0f, -1.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f,  0.0f, -1.0f,
+       -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, -1.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  0.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  0.0f,  0.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  0.0f,  0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+       -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  0.0f, 1.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  0.0f,  0.0f, 1.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  0.0f,  0.0f, 1.0f,
+       -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+       -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
 
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  1.0f,  0.0f,  0.0f,
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  1.0f,  0.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  1.0f,  0.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  1.0f,  0.0f,  0.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  1.0f,  0.0f,  0.0f,
+       0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  1.0f,  0.0f,  0.0f,
+       0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  1.0f,  0.0f,  0.0f,
+       0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, -1.0f,  0.0f,
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
+       0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  0.0f, -1.0f,  0.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, -1.0f,  0.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
-
+       -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f,  1.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+       -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,
 };
 
 float widest = 1.0;
@@ -100,6 +164,7 @@ int main(int argc, char *argv[])
 	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
 	Shader ground_shader{"shaders/ground_vs.glsl", "shaders/ground_fs.glsl"};
+	Shader mesh_shader{"shaders/mesh_vs.glsl", "shaders/mesh_fs.glsl"};
 	Texture container_diffuse{"textures/container2.png", true};
 	Texture container_specular{"textures/container2_specular.png", true};
 	Texture container_emission{"textures/container2_emission.jpg", false};
@@ -107,17 +172,22 @@ int main(int argc, char *argv[])
 	Texture minecraft_texture{"textures/minecraft.png", false};
 	Texture ground_texture{"textures/grass.png", false};
 
+	std::vector<Texture> cube_textures;
+	Texture mesh_cube_texture{"textures/container2.png", true};
+	mesh_cube_texture.type = "texture_diffuse";
+	cube_textures.push_back(std::move(mesh_cube_texture));
+	Mesh cube_mesh{cube_vertices, cube_indices, std::move(cube_textures)};
+	// cube_textures.push_back(Texture{"textures/container2_specular.png", true});
+	// cube_textures.push_back(Texture{"textures/container2_emission.jpg", true});
+
 	GLuint default_VAO;
 	glGenVertexArrays(1, &default_VAO);
-	glBindVertexArray(default_VAO);
 
 	GLuint lighting_VAO;
 	glGenVertexArrays(1, &lighting_VAO);
-	glBindVertexArray(lighting_VAO);
 
 	GLuint ground_VAO;
 	glGenVertexArrays(1, &ground_VAO);
-	glBindVertexArray(ground_VAO);
 
 	//==== default VAO
 	glBindVertexArray(default_VAO);
@@ -248,14 +318,23 @@ int main(int argc, char *argv[])
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
+		//==== mesh
+		mesh_shader.use();
+
+		mesh_shader.set_vec3("light.ambient", light.ambient);
+		mesh_shader.set_vec3("light.diffuse", light.diffuse);
+		mesh_shader.set_vec3("light.specular", light.specular);
+		mesh_shader.set_vec3("light.position", light.position);
+		mesh_shader.set_vec3("camera_position", main_window.get_camera_position());
+
+		main_window.reset_model();
+		main_window.translate_model(3.0f, 1.0f, 0.0f);
+		cube_mesh.draw(main_window, mesh_shader);
+
 		// poll current events and swap the buffers
 		glfwPollEvents();
 		main_window.swap_buffers();
 	}
-
-	glDeleteVertexArrays(1, &default_VAO);
-	glDeleteBuffers(1, &VBO);
-	// glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 }

@@ -14,6 +14,10 @@ class Shader {
 public:
 	Shader(const GLchar *vertex_shader, const GLchar *fragment_shader);
 	~Shader();
+
+	Shader(const Shader &o) = delete;
+	Shader & operator=(const Shader &o) = delete;
+
 	void use() const;
 	GLuint get_program() const;
 
