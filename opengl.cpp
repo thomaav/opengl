@@ -83,8 +83,6 @@ void update_cubes(bool increment)
 	}
 }
 
-bool use_texture = 1;
-
 int main(int argc, char *argv[])
 {
 	Window main_window{true};
@@ -153,15 +151,9 @@ int main(int argc, char *argv[])
 
 		glBindVertexArray(default_VAO);
 
-		if (!use_texture) {
-			texture_shader.set_vec3("material.specular_lighting", emerald.specular_lighting);
-			texture_shader.set_float("material.shininess", emerald.shininess);
-		} else {
-			texture_shader.set_vec3("material.specular_lighting", steel_container.specular_lighting);
-			texture_shader.set_float("material.shininess", steel_container.shininess);
-		}
+		texture_shader.set_vec3("material.specular_lighting", steel_container.specular_lighting);
+		texture_shader.set_float("material.shininess", steel_container.shininess);
 
-		texture_shader.set_bool("use_texture", use_texture);
 		texture_shader.set_int("material.diffuse_lighting", 0);
 		container_texture.use(GL_TEXTURE0);
 

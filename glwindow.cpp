@@ -6,8 +6,6 @@
 
 void update_cubes(bool increment);
 
-extern bool use_texture;
-
 namespace {
 	void fb_resize_cb(GLFWwindow *window, int width, int height)
 	{
@@ -33,8 +31,6 @@ namespace {
 
 	void key_cb(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
-		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-			use_texture = !use_texture;
 	}
 
 	void change_lighting_dynamically(GLFWwindow *window)

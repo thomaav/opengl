@@ -1,6 +1,5 @@
 #version 330 core
 uniform vec3 camera_position;
-uniform bool use_texture;
 
 in vec2 texture_coord;
 in vec3 normal;
@@ -42,10 +41,5 @@ void main()
 	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), material.shininess);
 	vec3 specular_lighting = (material.specular_lighting * spec) * light.specular;
 
-	if (use_texture) {
-		fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
-	} else {
-		vec4 object_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		fragment_color = object_color * vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
-	}
+	fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
 }
