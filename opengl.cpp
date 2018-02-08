@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 
 		mesh_shader.set_vec3("light.ambient", light.ambient);
 		mesh_shader.set_vec3("light.diffuse", light.diffuse);
-		mesh_shader.set_vec3("light.specular", light.specular);
+		mesh_shader.set_vec3("light.specular", glm::vec3{0.5f, 0.5f, 0.5f});
 		mesh_shader.set_vec3("light.position", light.position);
 		mesh_shader.set_vec3("camera_position", main_window.get_camera_position());
 
