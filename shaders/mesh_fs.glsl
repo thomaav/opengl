@@ -41,7 +41,7 @@ void main()
 	vec3 norm_view_direction = normalize(camera_position - fragment_position);
 	vec3 norm_reflected_view_direction = reflect(-norm_light_direction, norm_normal);
 	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), 32.0f);
-	vec3 specular_lighting = spec * light.specular;
+	vec3 specular_lighting = vec3(texture(material.texture_specular1, texture_coord)) * spec * light.specular;
 
 	fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
 }

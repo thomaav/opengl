@@ -173,9 +173,15 @@ int main(int argc, char *argv[])
 	Texture ground_texture{"textures/grass.png", false};
 
 	std::vector<Texture> cube_textures;
-	Texture mesh_cube_texture{"textures/container2.png", true};
-	mesh_cube_texture.type = "texture_diffuse";
-	cube_textures.push_back(std::move(mesh_cube_texture));
+
+	Texture mesh_cube_texture_diffuse{"textures/container2.png", true};
+	mesh_cube_texture_diffuse.type = "texture_diffuse";
+	cube_textures.push_back(std::move(mesh_cube_texture_diffuse));
+
+	Texture mesh_cube_texture_specular{"textures/container2_specular.png", true};
+	mesh_cube_texture_specular.type = "texture_specular";
+	cube_textures.push_back(std::move(mesh_cube_texture_specular));
+
 	Mesh cube_mesh{cube_vertices, cube_indices, std::move(cube_textures)};
 	// cube_textures.push_back(Texture{"textures/container2_specular.png", true});
 	// cube_textures.push_back(Texture{"textures/container2_emission.jpg", true});
