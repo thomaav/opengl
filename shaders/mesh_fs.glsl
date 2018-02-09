@@ -25,6 +25,7 @@ struct Material {
 
 uniform Material material;
 uniform Light light;
+uniform float time;
 
 void main()
 {
@@ -43,5 +44,18 @@ void main()
 	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), 32.0f);
 	vec3 specular_lighting = vec3(texture(material.texture_specular1, texture_coord)) * spec * light.specular;
 
-	fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting, 1.0f);
+	vec3 original_lighting = ambient_lighting + diffuse_lighting + specular_lighting;
+	vec3 emission_lighting = vec3(texture(material.texture_diffuse2, texture_coord));
+
+	if (vec3(texture(material.texture_specular1, texture_coord)).r == 0.0f) {
+		if (emission_lighting.g > 0.05f) {
+			emission_lighting.r = 0.0f;
+			emission_lighting.g = 0.0f;
+			emission_lighting.b = sin(time) / 2.0f + 0.5f;
+		}
+	} else {
+		emission_lighting = vec3(0.0f, 0.0f, 0.0f);
+	}
+
+	fragment_color = vec4(ambient_lighting + diffuse_lighting + specular_lighting + emission_lighting, 1.0f);
 }

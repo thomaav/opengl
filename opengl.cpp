@@ -182,9 +182,11 @@ int main(int argc, char *argv[])
 	mesh_cube_texture_specular.type = "texture_specular";
 	cube_textures.push_back(std::move(mesh_cube_texture_specular));
 
+	Texture mesh_cube_texture_emission{"textures/container2_emission.jpg", false};
+	mesh_cube_texture_emission.type = "texture_diffuse";
+	cube_textures.push_back(std::move(mesh_cube_texture_emission));
+
 	Mesh cube_mesh{cube_vertices, cube_indices, std::move(cube_textures)};
-	// cube_textures.push_back(Texture{"textures/container2_specular.png", true});
-	// cube_textures.push_back(Texture{"textures/container2_emission.jpg", true});
 
 	GLuint default_VAO;
 	glGenVertexArrays(1, &default_VAO);
@@ -327,9 +329,11 @@ int main(int argc, char *argv[])
 		//==== mesh
 		mesh_shader.use();
 
+		mesh_shader.set_float("time", glfwGetTime());
+
 		mesh_shader.set_vec3("light.ambient", light.ambient);
 		mesh_shader.set_vec3("light.diffuse", light.diffuse);
-		mesh_shader.set_vec3("light.specular", glm::vec3{0.5f, 0.5f, 0.5f});
+		mesh_shader.set_vec3("light.specular", light.specular);
 		mesh_shader.set_vec3("light.position", light.position);
 		mesh_shader.set_vec3("camera_position", main_window.get_camera_position());
 
