@@ -9,9 +9,8 @@ public:
 	GLuint id = 0;
 	std::string type;
 	std::string texture_fp;
-	bool alpha;
 
-	Texture(const std::string texture_fp, bool alpha);
+	Texture(const std::string texture_fp);
 	~Texture();
 
 	Texture(const Texture &o) = delete;

@@ -103,7 +103,7 @@ std::vector<Texture> Model::load_material_textures(aiMaterial *mat, aiTextureTyp
 	for (unsigned i = 0; i < mat->GetTextureCount(type); ++i) {
 		aiString str;
 		mat->GetTexture(type, i, &str);
-		Texture texture{dir + '/' + str.C_Str(), true};
+		Texture texture{dir + '/' + str.C_Str()};
 		texture.type = type_name;
 		textures.push_back(std::move(texture));
 	}

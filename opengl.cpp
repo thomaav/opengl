@@ -167,24 +167,24 @@ int main(int argc, char *argv[])
 	Shader ground_shader{"shaders/ground_vs.glsl", "shaders/ground_fs.glsl"};
 	Shader mesh_shader{"shaders/mesh_vs.glsl", "shaders/mesh_fs.glsl"};
 	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
-	Texture container_diffuse{"textures/container2.png", true};
-	Texture container_specular{"textures/container2_specular.png", true};
-	Texture container_emission{"textures/container2_emission.jpg", false};
-	Texture awesomeface_texture{"textures/awesomeface.png", true};
-	Texture minecraft_texture{"textures/minecraft.png", false};
-	Texture ground_texture{"textures/grass.png", false};
+	Texture container_diffuse{"textures/container2.png"};
+	Texture container_specular{"textures/container2_specular.png"};
+	Texture container_emission{"textures/container2_emission.jpg"};
+	Texture awesomeface_texture{"textures/awesomeface.png"};
+	Texture minecraft_texture{"textures/minecraft.png"};
+	Texture ground_texture{"textures/grass.png"};
 
 	std::vector<Texture> cube_textures;
 
-	Texture mesh_cube_texture_diffuse{"textures/container2.png", true};
+	Texture mesh_cube_texture_diffuse{"textures/container2.png"};
 	mesh_cube_texture_diffuse.type = "texture_diffuse";
 	cube_textures.push_back(std::move(mesh_cube_texture_diffuse));
 
-	Texture mesh_cube_texture_specular{"textures/container2_specular.png", true};
+	Texture mesh_cube_texture_specular{"textures/container2_specular.png"};
 	mesh_cube_texture_specular.type = "texture_specular";
 	cube_textures.push_back(std::move(mesh_cube_texture_specular));
 
-	Texture mesh_cube_texture_emission{"textures/container2_emission.jpg", false};
+	Texture mesh_cube_texture_emission{"textures/container2_emission.jpg"};
 	mesh_cube_texture_emission.type = "texture_diffuse";
 	cube_textures.push_back(std::move(mesh_cube_texture_emission));
 
