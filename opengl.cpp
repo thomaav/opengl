@@ -15,6 +15,7 @@
 #include "glmaterial.h"
 #include "gllight.h"
 #include "glmesh.h"
+#include "glmodel.h"
 
 std::vector<Vertex> cube_vertices = {
 	{ glm::vec3{-0.5f, -0.5f, -0.5f},   glm::vec3{0.0f,  0.0f, -1.0f},    glm::vec2{0.0f, 0.0f} },
@@ -165,6 +166,7 @@ int main(int argc, char *argv[])
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
 	Shader ground_shader{"shaders/ground_vs.glsl", "shaders/ground_fs.glsl"};
 	Shader mesh_shader{"shaders/mesh_vs.glsl", "shaders/mesh_fs.glsl"};
+	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
 	Texture container_diffuse{"textures/container2.png", true};
 	Texture container_specular{"textures/container2_specular.png", true};
 	Texture container_emission{"textures/container2_emission.jpg", false};
@@ -187,6 +189,8 @@ int main(int argc, char *argv[])
 	cube_textures.push_back(std::move(mesh_cube_texture_emission));
 
 	Mesh cube_mesh{cube_vertices, cube_indices, std::move(cube_textures)};
+
+	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 
 	GLuint default_VAO;
 	glGenVertexArrays(1, &default_VAO);
@@ -340,6 +344,14 @@ int main(int argc, char *argv[])
 		main_window.reset_model();
 		main_window.translate_model(3.0f, 1.0f, 0.0f);
 		cube_mesh.draw(main_window, mesh_shader);
+
+		//==== model
+		model_shader.use();
+
+		main_window.reset_model();
+		main_window.translate_model(-3.0f, 1.0f, 0.0f);
+		main_window.scale_model(0.1f);
+		nanosuit.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();

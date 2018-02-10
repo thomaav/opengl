@@ -1,6 +1,6 @@
 CC=clang++
 CFLAGS=-Wall -std=c++11 -g
-LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lassimp
 
 OBJ_DIR=objects
 OBJS=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard *.cpp))

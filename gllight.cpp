@@ -1,4 +1,4 @@
- #include "gllight.h"
+#include "gllight.h"
 
 Light light {
 	glm::vec3{0.0f, 1.0f, 0.0f},

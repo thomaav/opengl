@@ -16,6 +16,17 @@ Mesh::~Mesh()
 	;
 }
 
+Mesh::Mesh(Mesh &&o) noexcept
+	: vertices(std::move(o.vertices))
+	, indices(std::move(o.indices))
+	, textures(std::move(o.textures))
+	, VAO(o.VAO), VBO(o.VBO), EBO(o.EBO)
+{
+	o.VAO = 0;
+	o.VBO = 0;
+	o.EBO = 0;
+}
+
 void Mesh::draw(Window &window, Shader &shader)
 {
 	shader.set_mat4("projection", window.projection);

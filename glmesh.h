@@ -29,6 +29,11 @@ public:
 
 	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
 	~Mesh();
+
+	Mesh(const Mesh &o) = delete;
+	Mesh & operator=(const Mesh &o) = delete;
+	Mesh(Mesh &&o) noexcept;
+
 	void draw(Window &window, Shader &shader);
 private:
 	GLuint VAO, VBO, EBO = 0;
