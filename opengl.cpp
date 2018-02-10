@@ -160,7 +160,7 @@ void update_cubes(bool increment)
 
 int main(int argc, char *argv[])
 {
-	Window main_window{true};
+	Window main_window{false};
 
 	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
@@ -191,6 +191,7 @@ int main(int argc, char *argv[])
 	Mesh cube_mesh{cube_vertices, cube_indices, std::move(cube_textures)};
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
+	Model oldtimer{"models/oldtimer/Old_timer.obj"};
 
 	GLuint default_VAO;
 	glGenVertexArrays(1, &default_VAO);
@@ -352,6 +353,11 @@ int main(int argc, char *argv[])
 		main_window.translate_model(-3.0f, 1.0f, 0.0f);
 		main_window.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
+
+		main_window.reset_model();
+		main_window.translate_model(3.0f, 1.0f, 3.0f);
+		main_window.scale_model(0.3f);
+		oldtimer.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
