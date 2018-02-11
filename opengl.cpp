@@ -257,26 +257,27 @@ int main(int argc, char *argv[])
 	btDiscreteDynamicsWorld *world =
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collision_config);
 
-	world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+	world->setGravity(btVector3(0.0f, -9.81f, 0.0f));
 
-	btCollisionShape *ground_shape = new btStaticPlaneShape(btVector3(0.0f, -1.0f, 0.0f), 1.0f);
+	btCollisionShape *ground_shape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 1.0f);
 	btDefaultMotionState *motion_state_ground =
 		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
-						     btVector3(0.0f, -1.0f, 0.0f)));
+						     btVector3(0.0f, -2.0f, 0.0f)));
 	btRigidBody::btRigidBodyConstructionInfo
 		rigid_body_info_ground(0, motion_state_ground, ground_shape, btVector3(0.0f, 0.0f, 0.0f));
 	btRigidBody *rigid_body_ground = new btRigidBody(rigid_body_info_ground);
-	// world->addRigidBody(rigid_body_ground);
+	world->addRigidBody(rigid_body_ground);
 
 	btCollisionShape *box_shape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
 	btDefaultMotionState *motion_state_box =
 		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
-						     btVector3(0.0f, 50.0f, 0.0f)));
+						     btVector3(0.0f, 10.0f, 0.0f)));
 	btVector3 box_inertia(0.0f, 0.0f, 0.0f);
 	box_shape->calculateLocalInertia(1.0f, box_inertia);
 	btRigidBody::btRigidBodyConstructionInfo
 		rigid_body_info_box(1.0f, motion_state_box, box_shape, box_inertia);
 	btRigidBody *rigid_body_box = new btRigidBody(rigid_body_info_box);
+	rigid_body_box->setLinearVelocity(btVector3(-1.0f, 0.0f, 0.0f));
 	world->addRigidBody(rigid_body_box);
 
 	btTransform bt_transform_box;
@@ -380,7 +381,7 @@ int main(int argc, char *argv[])
 
 		main_window.reset_model();
 		main_window.translate_model(bt_transform_box.getOrigin().getX() + 3.0f,
-					    bt_transform_box.getOrigin().getY(),
+					    bt_transform_box.getOrigin().getY() - 0.5f,
 					    bt_transform_box.getOrigin().getZ());
 		cube_mesh.draw(main_window, mesh_shader);
 		std::cout << bt_transform_box.getOrigin().getY() << std::endl;
