@@ -1,6 +1,6 @@
 CC=clang++
 CFLAGS=-Wall -std=c++11 -g -I /usr/local/include/bullet
-LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lassimp -lBulletDynamics -lLinearMath
+LDLIBS=-lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lassimp -lBulletDynamics -lLinearMath -lBulletCollision
 
 OBJ_DIR=objects
 OBJS=$(patsubst %.cpp, $(OBJ_DIR)/%.o, $(wildcard *.cpp))

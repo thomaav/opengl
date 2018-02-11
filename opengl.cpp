@@ -249,8 +249,43 @@ int main(int argc, char *argv[])
 	//==== unbind for good measure
 	glBindVertexArray(0);
 
+	//==== physics
+	btBroadphaseInterface *broadphase = new btDbvtBroadphase();
+	btDefaultCollisionConfiguration *collision_config = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(collision_config);
+	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver;
+	btDiscreteDynamicsWorld *world =
+		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collision_config);
+
+	world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+
+	btCollisionShape *ground_shape = new btStaticPlaneShape(btVector3(0.0f, -1.0f, 0.0f), 1.0f);
+	btDefaultMotionState *motion_state_ground =
+		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
+						     btVector3(0.0f, -1.0f, 0.0f)));
+	btRigidBody::btRigidBodyConstructionInfo
+		rigid_body_info_ground(0, motion_state_ground, ground_shape, btVector3(0.0f, 0.0f, 0.0f));
+	btRigidBody *rigid_body_ground = new btRigidBody(rigid_body_info_ground);
+	// world->addRigidBody(rigid_body_ground);
+
+	btCollisionShape *box_shape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
+	btDefaultMotionState *motion_state_box =
+		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
+						     btVector3(0.0f, 50.0f, 0.0f)));
+	btVector3 box_inertia(0.0f, 0.0f, 0.0f);
+	box_shape->calculateLocalInertia(1.0f, box_inertia);
+	btRigidBody::btRigidBodyConstructionInfo
+		rigid_body_info_box(1.0f, motion_state_box, box_shape, box_inertia);
+	btRigidBody *rigid_body_box = new btRigidBody(rigid_body_info_box);
+	world->addRigidBody(rigid_body_box);
+
+	btTransform bt_transform_box;
+
 	while (!main_window.should_close()) {
 		main_window.process_input();
+
+		world->stepSimulation(1.0f / 60.0f, 10);
+		bt_transform_box = rigid_body_box->getWorldTransform();
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -344,8 +379,11 @@ int main(int argc, char *argv[])
 		mesh_shader.set_vec3("camera_position", main_window.get_camera_position());
 
 		main_window.reset_model();
-		main_window.translate_model(3.0f, 1.0f, 0.0f);
+		main_window.translate_model(bt_transform_box.getOrigin().getX() + 3.0f,
+					    bt_transform_box.getOrigin().getY(),
+					    bt_transform_box.getOrigin().getZ());
 		cube_mesh.draw(main_window, mesh_shader);
+		std::cout << bt_transform_box.getOrigin().getY() << std::endl;
 
 		//==== model
 		model_shader.use();
@@ -364,6 +402,12 @@ int main(int argc, char *argv[])
 		glfwPollEvents();
 		main_window.swap_buffers();
 	}
+
+	delete world;
+	delete solver;
+	delete dispatcher;
+	delete collision_config;
+	delete broadphase;
 
 	glfwTerminate();
 }
