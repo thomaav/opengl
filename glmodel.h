@@ -18,12 +18,27 @@
 
 class Model {
 public:
+	btRigidBody *rigid_body;
+
 	Model(std::string path);
+	~Model();
+
+	Model(const Model &o) = delete;
+	Model & operator=(const Model &o) = delete;
+
+	void init_physics();
+	btTransform get_transform();
+
 	void draw(Window &window, Shader &shader);
 private:
 	std::vector<Mesh> meshes;
 	std::string dir;
 	std::vector<std::string> texture_fps;
+
+	float mass;
+	btCollisionShape *shape;
+	btDefaultMotionState *motion_state;
+	btVector3 inertia;
 
 	void load_model(std::string path);
 	void process_node(aiNode *node, const aiScene *scene);

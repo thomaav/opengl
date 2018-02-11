@@ -18,6 +18,7 @@
 #include "glmesh.h"
 #include "glmodel.h"
 #include "glground.h"
+#include "glworld.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,20 +38,17 @@ int main(int argc, char *argv[])
 	btRigidBody *ground_rigid_body = init_ground_physics();
 
 	//==== physics
-	btBroadphaseInterface *broadphase = new btDbvtBroadphase();
-	btDefaultCollisionConfiguration *collision_config = new btDefaultCollisionConfiguration();
-	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(collision_config);
-	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver;
-	btDiscreteDynamicsWorld *world =
-		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collision_config);
+	World world{};
 
-	world->setGravity(btVector3(0.0f, -9.81f, 0.0f));
-	world->addRigidBody(ground_rigid_body);
+	world.set_gravity(0.0f, -9.81f, 0.0f);
+	world.physics_world->addRigidBody(ground_rigid_body);
+	world.physics_world->addRigidBody(nanosuit.rigid_body);
+	world.physics_world->addRigidBody(oldtimer.rigid_body);
 
 	while (!main_window.should_close()) {
 		main_window.process_input();
 
-		world->stepSimulation(1.0f / 60.0f, 10);
+		world.physics_world->stepSimulation(1.0f / 60.0f, 10);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -71,7 +69,6 @@ int main(int argc, char *argv[])
 		ground_shader.set_vec3("object_color", glm::vec3{0.75f, 0.75f, 0.75f});
 
 		main_window.reset_model();
-		main_window.translate_model(0.0f, -1.0f, 0.0f);
 		main_window.scale_model(10.0f);
 		ground_shader.set_mat4("model", main_window.model);
 
@@ -81,13 +78,17 @@ int main(int argc, char *argv[])
 		model_shader.use();
 
 		main_window.reset_model();
-		main_window.translate_model(-3.0f, 1.0f, 0.0f);
+		main_window.translate_model(nanosuit.get_transform().getOrigin().getX(),
+					    nanosuit.get_transform().getOrigin().getY(),
+					    nanosuit.get_transform().getOrigin().getZ());
 		main_window.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
 		main_window.reset_model();
-		main_window.translate_model(3.0f, 1.0f, 3.0f);
-		main_window.scale_model(0.3f);
+		main_window.translate_model(oldtimer.get_transform().getOrigin().getX() + 3.0f,
+					    oldtimer.get_transform().getOrigin().getY(),
+					    oldtimer.get_transform().getOrigin().getZ() + 3.0f);
+		main_window.scale_model(0.1f);
 		oldtimer.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
@@ -96,12 +97,6 @@ int main(int argc, char *argv[])
 	}
 
 	delete ground_rigid_body;
-
-	delete world;
-	delete solver;
-	delete dispatcher;
-	delete collision_config;
-	delete broadphase;
 
 	glfwTerminate();
 }

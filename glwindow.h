@@ -45,6 +45,9 @@ private:
 	const float max_fov = 60.0f;
 	const float min_fov = 1.0f;
 
+	double last_frame_time = 0.0;
+	int nframes = 0;
+
 	Camera camera;
 	GLFWwindow *window;
 };

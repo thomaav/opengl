@@ -32,18 +32,22 @@ GLuint gl_init_ground()
 	return VAO;
 }
 
+btCollisionShape *shape;
+btDefaultMotionState *motion_state;
+btRigidBody *rigid_body;
+
 btRigidBody *init_ground_physics()
 {
-	btCollisionShape *shape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 1.0f);
-	btDefaultMotionState *motion_state =
+	shape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 1.0f);
+	motion_state =
 		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
-						     btVector3(0.0f, -2.0f, 0.0f)));
+						     btVector3(0.0f, -1.0f, 0.0f)));
 	btRigidBody::btRigidBodyConstructionInfo
 		rigid_body_info(0, motion_state, shape, btVector3(0.0f, 0.0f, 0.0f));
-	btRigidBody *rigid_body = new btRigidBody(rigid_body_info);
+	rigid_body = new btRigidBody(rigid_body_info);
 
-	delete shape;
-	delete motion_state;
+	// delete shape;
+	// delete motion_state;
 
 	return rigid_body;
 }

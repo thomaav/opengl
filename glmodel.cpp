@@ -5,6 +5,38 @@
 Model::Model(std::string path)
 {
 	load_model(path);
+	init_physics();
+}
+
+Model::~Model()
+{
+	if (rigid_body)
+		delete rigid_body;
+
+	if (motion_state)
+		delete motion_state;
+
+	if (shape)
+		delete shape;
+}
+
+void Model::init_physics()
+{
+	mass = 1.0f;
+	inertia = btVector3(0.0f, 0.0f, 0.0f);
+
+	shape = new btBoxShape(btVector3(0.01f, 0.01f, 0.01f));
+	motion_state = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
+							    btVector3(0.0f, 10.0f, 0.0f)));
+	shape->calculateLocalInertia(mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo
+		rigid_body_info(mass, motion_state, shape, inertia);
+	rigid_body = new btRigidBody(rigid_body_info);
+}
+
+btTransform Model::get_transform()
+{
+	return rigid_body->getWorldTransform();
 }
 
 void Model::draw(Window &window, Shader &shader)
