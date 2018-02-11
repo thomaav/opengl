@@ -2,7 +2,8 @@
 #include "glcamera.h"
 
 Camera::Camera()
-	: mouse_speed(0.010f)
+	: init_scene(true)
+	, mouse_speed(0.010f)
 	, speed(2.0f)
 	, horizontal_angle(3.14f)
 	, vertical_angle(0.0f)
@@ -40,6 +41,11 @@ void Camera::update_direction(GLFWwindow *window)
 	glfwGetCursorPos(window, &x, &y);
 	glfwGetWindowSize(window, &width, &height);
 	glfwSetCursorPos(window, width / 2, height / 2);
+
+	if (init_scene) {
+		glfwGetCursorPos(window, &x, &y);
+		init_scene = false;
+	}
 
 	float current_time = glfwGetTime();
 	float delta_time = current_time - last_time;

@@ -17,6 +17,7 @@ public:
 	glm::mat4 view_mat4();
 	glm::vec3 get_position();
 private:
+	bool init_scene;
 	float mouse_speed;
 	float speed;
 	float horizontal_angle;
