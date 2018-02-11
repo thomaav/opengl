@@ -71,6 +71,7 @@ Window::Window(bool fullscreen)
 	}
 
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
 	glViewport(0, 0, width, height);
@@ -185,6 +186,15 @@ bool Window::should_close()
 
 void Window::swap_buffers()
 {
+	double current_frame_time = glfwGetTime();
+	++nframes;
+
+	if (current_frame_time - last_frame_time >= 1.0) {
+		// std::cout << 1000.0 / double(nframes) << " ms/frame" << std::endl;
+		nframes = 0;
+		last_frame_time += 1.0;
+	}
+
 	glfwSwapBuffers(window);
 }
 
