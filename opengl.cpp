@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 	Texture ground_texture{"textures/grass.png"};
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
-	Model oldtimer{"models/oldtimer/Old_timer.obj"};
 
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
@@ -44,7 +43,6 @@ int main(int argc, char *argv[])
 	world.set_gravity(0.0f, -9.81f, 0.0f);
 	world.physics_world->addRigidBody(ground_rigid_body);
 	world.physics_world->addRigidBody(nanosuit.rigid_body);
-	world.physics_world->addRigidBody(oldtimer.rigid_body);
 
 	BulletDebugDrawer debug_drawer;
 	world.physics_world->setDebugDrawer(&debug_drawer);
@@ -91,13 +89,6 @@ int main(int argc, char *argv[])
 					    nanosuit.get_transform().getOrigin().getZ());
 		main_window.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
-
-		main_window.reset_model();
-		main_window.translate_model(oldtimer.get_transform().getOrigin().getX() + 3.0f,
-					    oldtimer.get_transform().getOrigin().getY() - 1.0f,
-					    oldtimer.get_transform().getOrigin().getZ() + 3.0f);
-		main_window.scale_model(0.1f);
-		oldtimer.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
