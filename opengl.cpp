@@ -19,32 +19,7 @@
 #include "glmodel.h"
 #include "glground.h"
 #include "glworld.h"
-
-class BulletDebugDrawer_DeprecatedOpenGL : public btIDebugDraw{
-public:
-	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix){
-		glUseProgram(0); // Use Fixed-function pipeline (no shaders)
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(&pViewMatrix[0][0]);
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(&pProjectionMatrix[0][0]);
-	}
-	virtual void drawLine(const btVector3& from,const btVector3& to,const btVector3& color){
-		glColor3f(color.x(), color.y(), color.z());
-		glBegin(GL_LINES);
-			glVertex3f(from.x(), from.y(), from.z());
-			glVertex3f(to.x(), to.y(), to.z());
-		glEnd();
-	}
-	virtual void drawContactPoint(const btVector3 &,const btVector3 &,btScalar,int,const btVector3 &){}
-	virtual void reportErrorWarning(const char *){}
-	virtual void draw3dText(const btVector3 &,const char *){}
-	virtual void setDebugMode(int p){
-		m = p;
-	}
-	int getDebugMode(void) const {return 3;}
-	int m;
-};
+#include "bulletdebugdrawer.h"
 
 int main(int argc, char *argv[])
 {
@@ -71,6 +46,9 @@ int main(int argc, char *argv[])
 	world.physics_world->addRigidBody(nanosuit.rigid_body);
 	world.physics_world->addRigidBody(oldtimer.rigid_body);
 
+	BulletDebugDrawer debug_drawer;
+	world.physics_world->setDebugDrawer(&debug_drawer);
+
 	while (!main_window.should_close()) {
 		main_window.process_input();
 
@@ -78,6 +56,10 @@ int main(int argc, char *argv[])
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//==== debug view for bullet
+		debug_drawer.SetMatrices(main_window.view, main_window.projection);
+		world.physics_world->debugDrawWorld();
 
 		//==== ground
 		glBindTexture(GL_TEXTURE_2D, 0);
