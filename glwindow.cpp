@@ -24,7 +24,7 @@ namespace {
 			return;
 
 		if (button == GLFW_MOUSE_BUTTON_2)
-			owner->gitoggle_mouse();
+			owner->toggle_mouse();
 	}
 
 	void key_cb(GLFWwindow *window, int key, int scancode, int action, int mods)
