@@ -39,7 +39,7 @@ public:
 	btTransform get_transform();
 
 	void draw(Window &window, Shader &shader);
-	    btRigidBody *rigid_body;
+	         btRigidBody *rigid_body;
 private:
 	GLuint VAO, VBO, EBO = 0;
 

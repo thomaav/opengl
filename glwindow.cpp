@@ -22,11 +22,6 @@ namespace {
 	{
 		if (!(action == GLFW_PRESS))
 			return;
-
-		if (button == GLFW_MOUSE_BUTTON_1)
-			update_cubes(true);
-		else if (button == GLFW_MOUSE_BUTTON_2)
-			update_cubes(false);
 	}
 
 	void key_cb(GLFWwindow *window, int key, int scancode, int action, int mods)

@@ -28,9 +28,9 @@ Mesh::Mesh(Mesh &&o) noexcept
 	: vertices(std::move(o.vertices))
 	, indices(std::move(o.indices))
 	, textures(std::move(o.textures))
+	, rigid_body(o.rigid_body)
 	, VAO(o.VAO), VBO(o.VBO), EBO(o.EBO)
 	, mass(o.mass), shape(o.shape), motion_state(o.motion_state), inertia(o.inertia)
-	, rigid_body(o.rigid_body)
 {
 	o.VAO = 0;
 	o.VBO = 0;
