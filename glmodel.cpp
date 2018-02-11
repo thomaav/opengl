@@ -25,13 +25,14 @@ void Model::init_physics()
 	mass = 1.0f;
 	inertia = btVector3(0.0f, 0.0f, 0.0f);
 
-	shape = new btBoxShape(btVector3(0.01f, 0.01f, 0.01f));
+	shape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
 	motion_state = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
-							    btVector3(0.0f, 10.0f, 0.0f)));
+							    btVector3(0.0f, 3.0f, 0.0f)));
 	shape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo
 		rigid_body_info(mass, motion_state, shape, inertia);
 	rigid_body = new btRigidBody(rigid_body_info);
+	rigid_body->setRestitution(0.0f);
 }
 
 btTransform Model::get_transform()

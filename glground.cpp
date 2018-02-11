@@ -38,7 +38,7 @@ btRigidBody *rigid_body;
 
 btRigidBody *init_ground_physics()
 {
-	shape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 1.0f);
+	shape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 0.0f);
 	motion_state =
 		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
 						     btVector3(0.0f, -1.0f, 0.0f)));
