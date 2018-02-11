@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <btBulletDynamicsCommon.h>
 
 #include "glshader.h"
 #include "gltexture.h"
@@ -34,9 +35,18 @@ public:
 	Mesh & operator=(const Mesh &o) = delete;
 	Mesh(Mesh &&o) noexcept;
 
+	void init_physics();
+	btTransform get_transform();
+
 	void draw(Window &window, Shader &shader);
+	    btRigidBody *rigid_body;
 private:
 	GLuint VAO, VBO, EBO = 0;
+
+	float mass;
+	btCollisionShape *shape;
+	btDefaultMotionState *motion_state;
+	btVector3 inertia;
 
 	void setup_mesh();
 };

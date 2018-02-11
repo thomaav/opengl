@@ -9,11 +9,19 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vecto
 	this->textures = std::move(textures);
 
 	setup_mesh();
+	init_physics();
 }
 
 Mesh::~Mesh()
 {
-	;
+	if (rigid_body)
+		delete rigid_body;
+
+	if (motion_state)
+		delete motion_state;
+
+	if (shape)
+		delete shape;
 }
 
 Mesh::Mesh(Mesh &&o) noexcept
@@ -21,10 +29,35 @@ Mesh::Mesh(Mesh &&o) noexcept
 	, indices(std::move(o.indices))
 	, textures(std::move(o.textures))
 	, VAO(o.VAO), VBO(o.VBO), EBO(o.EBO)
+	, mass(o.mass), shape(o.shape), motion_state(o.motion_state), inertia(o.inertia)
+	, rigid_body(o.rigid_body)
 {
 	o.VAO = 0;
 	o.VBO = 0;
 	o.EBO = 0;
+
+	o.shape = nullptr;
+	o.motion_state = nullptr;
+	o.rigid_body = nullptr;
+}
+
+void Mesh::init_physics()
+{
+	mass = 1.0f;
+	inertia = btVector3(0.0f, 0.0f, 0.0f);
+
+	shape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
+	motion_state = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
+							    btVector3(0.0f, 10.0f, 0.0f)));
+	shape->calculateLocalInertia(mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo
+		rigid_body_info(mass, motion_state, shape, inertia);
+	rigid_body = new btRigidBody(rigid_body_info);
+}
+
+btTransform Mesh::get_transform()
+{
+	return rigid_body->getWorldTransform();
 }
 
 void Mesh::draw(Window &window, Shader &shader)

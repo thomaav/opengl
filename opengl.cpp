@@ -266,19 +266,9 @@ int main(int argc, char *argv[])
 	btRigidBody::btRigidBodyConstructionInfo
 		rigid_body_info_ground(0, motion_state_ground, ground_shape, btVector3(0.0f, 0.0f, 0.0f));
 	btRigidBody *rigid_body_ground = new btRigidBody(rigid_body_info_ground);
-	world->addRigidBody(rigid_body_ground);
 
-	btCollisionShape *box_shape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
-	btDefaultMotionState *motion_state_box =
-		new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
-						     btVector3(0.0f, 10.0f, 0.0f)));
-	btVector3 box_inertia(0.0f, 0.0f, 0.0f);
-	box_shape->calculateLocalInertia(1.0f, box_inertia);
-	btRigidBody::btRigidBodyConstructionInfo
-		rigid_body_info_box(1.0f, motion_state_box, box_shape, box_inertia);
-	btRigidBody *rigid_body_box = new btRigidBody(rigid_body_info_box);
-	rigid_body_box->setLinearVelocity(btVector3(-1.0f, 0.0f, 0.0f));
-	world->addRigidBody(rigid_body_box);
+	world->addRigidBody(rigid_body_ground);
+	world->addRigidBody(cube_mesh.rigid_body);
 
 	btTransform bt_transform_box;
 
@@ -286,7 +276,6 @@ int main(int argc, char *argv[])
 		main_window.process_input();
 
 		world->stepSimulation(1.0f / 60.0f, 10);
-		bt_transform_box = rigid_body_box->getWorldTransform();
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -380,11 +369,10 @@ int main(int argc, char *argv[])
 		mesh_shader.set_vec3("camera_position", main_window.get_camera_position());
 
 		main_window.reset_model();
-		main_window.translate_model(bt_transform_box.getOrigin().getX() + 3.0f,
-					    bt_transform_box.getOrigin().getY() - 0.5f,
-					    bt_transform_box.getOrigin().getZ());
+		main_window.translate_model(cube_mesh.get_transform().getOrigin().getX() + 3.0f,
+					    cube_mesh.get_transform().getOrigin().getY() - 0.5f,
+					    cube_mesh.get_transform().getOrigin().getZ());
 		cube_mesh.draw(main_window, mesh_shader);
-		std::cout << bt_transform_box.getOrigin().getY() << std::endl;
 
 		//==== model
 		model_shader.use();
