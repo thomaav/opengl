@@ -2,7 +2,6 @@ objects
 objects/*
 *.bin
 *.o
-*.obj
 *.wav
 opengl
 .projectile
