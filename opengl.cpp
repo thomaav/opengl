@@ -87,14 +87,14 @@ int main(int argc, char *argv[])
 
 		main_window.reset_model();
 		main_window.translate_model(nanosuit.get_transform().getOrigin().getX(),
-					    nanosuit.get_transform().getOrigin().getY(),
+					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
 					    nanosuit.get_transform().getOrigin().getZ());
 		main_window.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
 		main_window.reset_model();
 		main_window.translate_model(oldtimer.get_transform().getOrigin().getX() + 3.0f,
-					    oldtimer.get_transform().getOrigin().getY(),
+					    oldtimer.get_transform().getOrigin().getY() - 1.0f,
 					    oldtimer.get_transform().getOrigin().getZ() + 3.0f);
 		main_window.scale_model(0.1f);
 		oldtimer.draw(main_window, model_shader);

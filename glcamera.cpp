@@ -3,6 +3,7 @@
 
 Camera::Camera()
 	: init_scene(true)
+	, mouse_enabled(true)
 	, mouse_speed(0.010f)
 	, speed(2.0f)
 	, horizontal_angle(3.14f)
@@ -36,6 +37,9 @@ void Camera::update(GLFWwindow *window)
 
 void Camera::update_direction(GLFWwindow *window)
 {
+	if (!mouse_enabled)
+		return;
+
 	int width, height;
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
@@ -67,6 +71,11 @@ void Camera::update_direction(GLFWwindow *window)
 	right.z = cos(horizontal_angle - 3.14f / 2.0f);
 
 	up = glm::cross(right, direction);
+}
+
+void Camera::toggle_mouse()
+{
+	mouse_enabled = !mouse_enabled;
 }
 
 void Camera::update_position(GLFWwindow *window)

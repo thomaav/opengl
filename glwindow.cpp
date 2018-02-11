@@ -4,8 +4,6 @@
 #include "glwindow.h"
 #include "gllight.h"
 
-void update_cubes(bool increment);
-
 namespace {
 	void fb_resize_cb(GLFWwindow *window, int width, int height)
 	{
@@ -20,8 +18,13 @@ namespace {
 
 	void click_cb(GLFWwindow *window, int button, int action, int mods)
 	{
+		Window *owner = (Window *) glfwGetWindowUserPointer(window);
+
 		if (!(action == GLFW_PRESS))
 			return;
+
+		if (button == GLFW_MOUSE_BUTTON_2)
+			owner->gitoggle_mouse();
 	}
 
 	void key_cb(GLFWwindow *window, int key, int scancode, int action, int mods)
@@ -231,6 +234,11 @@ void Window::scale_model(float x, float y, float z)
 void Window::scale_model(float scalar)
 {
 	model = glm::scale(model, glm::vec3(scalar, scalar, scalar));
+}
+
+void Window::toggle_mouse()
+{
+	camera.toggle_mouse();
 }
 
 glm::vec3 Window::get_camera_position()

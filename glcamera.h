@@ -13,11 +13,13 @@ public:
 	~Camera();
 	void update(GLFWwindow *window);
 	void update_direction(GLFWwindow *window);
+	void toggle_mouse();
 	void update_position(GLFWwindow *window);
 	glm::mat4 view_mat4();
 	glm::vec3 get_position();
 private:
 	bool init_scene;
+	bool mouse_enabled;
 	float mouse_speed;
 	float speed;
 	float horizontal_angle;

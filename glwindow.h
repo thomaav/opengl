@@ -39,6 +39,7 @@ public:
 	void scale_model(float x, float y, float z);
 	void scale_model(float scalar);
 
+	void toggle_mouse();
 	glm::vec3 get_camera_position();
 private:
 	float fov;
