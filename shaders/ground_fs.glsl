@@ -7,7 +7,18 @@ in vec2 texture_coord;
 
 out vec4 fragment_color;
 
+struct Light {
+	vec3 position;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+uniform Light light0;
+
 void main()
 {
-	fragment_color = texture(ground_texture, texture_coord) * vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	vec3 ambient = light0.ambient * vec3(texture(ground_texture, texture_coord));
+	fragment_color = vec4(ambient, 1.0f);
 }
