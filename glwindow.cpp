@@ -3,6 +3,9 @@
 
 #include "glwindow.h"
 #include "gllight.h"
+#include "glmodel.h"
+
+extern Model *nanosuit_ptr;
 
 namespace {
 	void fb_resize_cb(GLFWwindow *window, int width, int height)
@@ -29,6 +32,30 @@ namespace {
 
 	void key_cb(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
+		if (action == GLFW_PRESS && key == GLFW_KEY_I) {
+			nanosuit_ptr->rigid_body->applyImpulse(btVector3(0.0f, 0.0f, 1.0f),
+							       btVector3(0.0f, 0.0f, 0.0f));
+		}
+
+		if (action == GLFW_PRESS && key == GLFW_KEY_K) {
+			nanosuit_ptr->rigid_body->applyImpulse(btVector3(0.0f, 0.0f, -1.0f),
+							       btVector3(0.0f, 0.0f, 0.0f));
+		}
+
+		if (action == GLFW_PRESS && key == GLFW_KEY_J) {
+			nanosuit_ptr->rigid_body->applyImpulse(btVector3(1.0f, 0.0f, 0.0f),
+							       btVector3(0.0f, 0.0f, 0.0f));
+		}
+
+		if (action == GLFW_PRESS && key == GLFW_KEY_L) {
+			nanosuit_ptr->rigid_body->applyImpulse(btVector3(-1.0f, 0.0f, 0.0f),
+							       btVector3(0.0f, 0.0f, 0.0f));
+		}
+
+		if (action == GLFW_PRESS && key == GLFW_KEY_ENTER) {
+			nanosuit_ptr->rigid_body->applyImpulse(btVector3(0.0f, 3.0f, 0.0f),
+							       btVector3(0.0f, 0.0f, 0.0f));
+		}
 	}
 
 	void change_lighting_dynamically(GLFWwindow *window)
@@ -62,7 +89,7 @@ Window::Window(bool fullscreen)
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLFWmonitor *screen = fullscreen ? glfwGetPrimaryMonitor() : NULL;
 	window = glfwCreateWindow(width, height, "~", screen, NULL);

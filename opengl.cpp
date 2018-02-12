@@ -21,6 +21,8 @@
 #include "glworld.h"
 #include "bulletdebugdrawer.h"
 
+Model *nanosuit_ptr;
+
 int main(int argc, char *argv[])
 {
 	Window main_window{false};
@@ -33,6 +35,7 @@ int main(int argc, char *argv[])
 	Texture ground_texture{"textures/grass.png"};
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
+	nanosuit_ptr = &nanosuit;
 
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
