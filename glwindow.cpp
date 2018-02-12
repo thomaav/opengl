@@ -68,9 +68,9 @@ namespace {
 			owner->update_lighting(0.0f, -1.0f);
 
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-			light.position.x += 0.05;
+			light->position.x += 0.05;
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			light.position.x -= 0.05;
+			light->position.x -= 0.05;
 
 		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
 			owner->update_lighting('r', 0.0f);
@@ -149,64 +149,64 @@ void Window::update_fov(double yoffset)
 void Window::update_lighting(char color, double yoffset)
 {
 	if (yoffset) {
-		light.ambient.x += yoffset * 0.05f;
-		light.ambient.y += yoffset * 0.05f;
-		light.ambient.z += yoffset * 0.05f;
-		light.diffuse.x += yoffset * 0.05f;
-		light.diffuse.y += yoffset * 0.05f;
-		light.diffuse.z += yoffset * 0.05f;
-		light.specular.x += yoffset * 0.05f;
-		light.specular.y += yoffset * 0.05f;
-		light.specular.z += yoffset * 0.05f;
+		light->ambient.x += yoffset * 0.05f;
+		light->ambient.y += yoffset * 0.05f;
+		light->ambient.z += yoffset * 0.05f;
+		light->diffuse.x += yoffset * 0.05f;
+		light->diffuse.y += yoffset * 0.05f;
+		light->diffuse.z += yoffset * 0.05f;
+		light->specular.x += yoffset * 0.05f;
+		light->specular.y += yoffset * 0.05f;
+		light->specular.z += yoffset * 0.05f;
 	}
 
 	if (color) {
 		switch (color) {
 		case 'r':
-			light.ambient.x += 0.05f;
-			light.diffuse.x += 0.05f;
-			light.specular.x += 0.05f;
+			light->ambient.x += 0.05f;
+			light->diffuse.x += 0.05f;
+			light->specular.x += 0.05f;
 			break;
 		case 'g':
-			light.ambient.y += 0.05f;
-			light.diffuse.y += 0.05f;
-			light.specular.y += 0.05f;
+			light->ambient.y += 0.05f;
+			light->diffuse.y += 0.05f;
+			light->specular.y += 0.05f;
 			break;
 		case 'b':
-			light.ambient.z += 0.05f;
-			light.diffuse.z += 0.05f;
-			light.specular.z += 0.05f;
+			light->ambient.z += 0.05f;
+			light->diffuse.z += 0.05f;
+			light->specular.z += 0.05f;
 			break;
 		case 'x':
-			light.ambient.x = light.ambient.y = light.ambient.z = 0.0f;
-			light.diffuse.x = light.diffuse.y = light.diffuse.z = 0.0f;
-			light.specular.x = light.specular.y = light.specular.z = 0.0f;
+			light->ambient.x = light->ambient.y = light->ambient.z = 0.0f;
+			light->diffuse.x = light->diffuse.y = light->diffuse.z = 0.0f;
+			light->specular.x = light->specular.y = light->specular.z = 0.0f;
 			break;
 		default:
 			break;
 		}
 	}
 
-	light.ambient.x = fmax(0.0f, light.ambient.x);
-	light.ambient.x = fmin(1.0f, light.ambient.x);
-	light.ambient.y = fmax(0.0f, light.ambient.y);
-	light.ambient.y = fmin(1.0f, light.ambient.y);
-	light.ambient.z = fmax(0.0f, light.ambient.z);
-	light.ambient.z = fmin(1.0f, light.ambient.z);
+	light->ambient.x = fmax(0.0f, light->ambient.x);
+	light->ambient.x = fmin(1.0f, light->ambient.x);
+	light->ambient.y = fmax(0.0f, light->ambient.y);
+	light->ambient.y = fmin(1.0f, light->ambient.y);
+	light->ambient.z = fmax(0.0f, light->ambient.z);
+	light->ambient.z = fmin(1.0f, light->ambient.z);
 
-	light.diffuse.x = fmax(0.0f, light.diffuse.x);
-	light.diffuse.x = fmin(1.0f, light.diffuse.x);
-	light.diffuse.y = fmax(0.0f, light.diffuse.y);
-	light.diffuse.y = fmin(1.0f, light.diffuse.y);
-	light.diffuse.z = fmax(0.0f, light.diffuse.z);
-	light.diffuse.z = fmin(1.0f, light.diffuse.z);
+	light->diffuse.x = fmax(0.0f, light->diffuse.x);
+	light->diffuse.x = fmin(1.0f, light->diffuse.x);
+	light->diffuse.y = fmax(0.0f, light->diffuse.y);
+	light->diffuse.y = fmin(1.0f, light->diffuse.y);
+	light->diffuse.z = fmax(0.0f, light->diffuse.z);
+	light->diffuse.z = fmin(1.0f, light->diffuse.z);
 
-	light.specular.x = fmax(0.0f, light.specular.x);
-	light.specular.x = fmin(1.0f, light.specular.x);
-	light.specular.y = fmax(0.0f, light.specular.y);
-	light.specular.y = fmin(1.0f, light.specular.y);
-	light.specular.z = fmax(0.0f, light.specular.z);
-	light.specular.z = fmin(1.0f, light.specular.z);
+	light->specular.x = fmax(0.0f, light->specular.x);
+	light->specular.x = fmin(1.0f, light->specular.x);
+	light->specular.y = fmax(0.0f, light->specular.y);
+	light->specular.y = fmin(1.0f, light->specular.y);
+	light->specular.z = fmax(0.0f, light->specular.z);
+	light->specular.z = fmin(1.0f, light->specular.z);
 }
 
 bool Window::should_close()

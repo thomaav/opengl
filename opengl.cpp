@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
 	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
 	Texture ground_texture{"textures/grass.png"};
 
-	model_shader.add_light(&light);
-	ground_shader.add_light(&light);
+	model_shader.add_light(light);
+	ground_shader.add_light(light);
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		ground_shader.set_int("ground_texture", 0);
 		ground_texture.use(GL_TEXTURE0);
 
-		ground_shader.set_vec3("light_color", light.ambient);
+		ground_shader.set_vec3("light_color", light->ambient);
 		ground_shader.set_vec3("object_color", glm::vec3{0.75f, 0.75f, 0.75f});
 
 		main_window.reset_model();

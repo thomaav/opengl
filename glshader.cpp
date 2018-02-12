@@ -133,7 +133,7 @@ void Shader::set_mat4(const char *identifier, const glm::mat4 &mat) const
 	glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
 }
 
-void Shader::add_light(Light *light)
+void Shader::add_light(std::shared_ptr<Light> &light)
 {
 	std::string nlights = std::to_string(lights.size());
 	std::string light_identifier = "light" + nlights;

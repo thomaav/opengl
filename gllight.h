@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -16,4 +17,4 @@ public:
 	~Light();
 };
 
-extern Light light;
+extern std::shared_ptr<Light> light;
