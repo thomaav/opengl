@@ -1,10 +1,13 @@
 #pragma once
 #include <cstring>
+#include <vector>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "gllight.h"
 
 bool load_shader_src(const std::string &filename, std::string &buf);
 void shader_compilation_status(GLuint &shader);
@@ -27,6 +30,9 @@ public:
 	void set_4f(const char *identifier, float x, float y, float z, float w) const;
 	void set_vec3(const char *identifier, glm::vec3 vec) const;
 	void set_mat4(const char *identifier, const glm::mat4 &mat) const;
+
+	void add_light(Light *light);
 private:
 	GLuint program;
+	std::vector<Light *> lights;
 };

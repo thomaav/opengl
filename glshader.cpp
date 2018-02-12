@@ -80,6 +80,16 @@ Shader::~Shader()
 void Shader::use() const
 {
 	glUseProgram(program);
+
+	for (unsigned i = 0; i < lights.size(); ++i) {
+		std::string nlight = std::to_string(i);
+		std::string light_identifier = "light" + nlight;
+
+		set_vec3((light_identifier + ".position").c_str(), lights[i]->position);
+		set_vec3((light_identifier + ".ambient").c_str(), lights[i]->ambient);
+		set_vec3((light_identifier + ".diffuse").c_str(), lights[i]->diffuse);
+		set_vec3((light_identifier + ".specular").c_str(), lights[i]->specular);
+	}
 }
 
 GLuint Shader::get_program() const
@@ -121,4 +131,17 @@ void Shader::set_mat4(const char *identifier, const glm::mat4 &mat) const
 {
 	GLuint location = glGetUniformLocation(program, identifier);
 	glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
+}
+
+void Shader::add_light(Light *light)
+{
+	std::string nlights = std::to_string(lights.size());
+	std::string light_identifier = "light" + nlights;
+
+	set_vec3((light_identifier + ".position").c_str(), light->position);
+	set_vec3((light_identifier + ".ambient").c_str(), light->ambient);
+	set_vec3((light_identifier + ".diffuse").c_str(), light->diffuse);
+	set_vec3((light_identifier + ".specular").c_str(), light->specular);
+
+	lights.push_back(light);
 }

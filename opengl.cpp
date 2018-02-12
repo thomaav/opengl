@@ -34,6 +34,9 @@ int main(int argc, char *argv[])
 	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
 	Texture ground_texture{"textures/grass.png"};
 
+	model_shader.add_light(&light);
+	ground_shader.add_light(&light);
+
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;
 
@@ -85,11 +88,6 @@ int main(int argc, char *argv[])
 
 		//==== model
 		model_shader.use();
-
-		model_shader.set_vec3("light.position", light.position);
-		model_shader.set_vec3("light.ambient", light.ambient);
-		model_shader.set_vec3("light.diffuse", light.diffuse);
-		model_shader.set_vec3("light.specular", light.specular);
 
 		main_window.reset_model();
 		main_window.translate_model(nanosuit.get_transform().getOrigin().getX(),
