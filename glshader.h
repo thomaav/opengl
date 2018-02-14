@@ -32,7 +32,7 @@ public:
 	void set_vec3(const char *identifier, glm::vec3 vec) const;
 	void set_mat4(const char *identifier, const glm::mat4 &mat) const;
 
-	void add_light(std::shared_ptr<Light> &light);
+	void add_light(std::shared_ptr<Light> light);
 	std::vector<std::shared_ptr<Light>> lights;
 private:
 	GLuint program;
