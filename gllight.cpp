@@ -3,12 +3,21 @@
 #include "gllight.h"
 #include "glshader.h"
 
-std::shared_ptr<PointLight> light = std::shared_ptr<PointLight>
+std::shared_ptr<PointLight> point_light = std::shared_ptr<PointLight>
 	(new PointLight {
 		glm::vec3{0.0f, 1.0f, 0.0f},
 
-		glm::vec3{0.5f, 0.5f, 0.5f},
-		glm::vec3{0.5f, 0.5f, 0.5f},
+		glm::vec3{0.1f, 0.1f, 0.1f},
+		glm::vec3{0.8f, 0.8f, 0.8f},
+		glm::vec3{1.0f, 1.0f, 1.0f}
+	});
+
+std::shared_ptr<DirectionalLight> dir_light = std::shared_ptr<DirectionalLight>
+	(new DirectionalLight {
+		glm::vec3{0.0f, -1.0f, 0.0f},
+
+		glm::vec3{0.05f, 0.05f, 0.05f},
+		glm::vec3{0.3f, 0.3f, 0.3f},
 		glm::vec3{1.0f, 1.0f, 1.0f}
 	});
 

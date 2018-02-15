@@ -46,4 +46,5 @@ public:
 	virtual void apply(const Shader &shader, unsigned nlight);
 };
 
-extern std::shared_ptr<PointLight> light;
+extern std::shared_ptr<PointLight> point_light;
+extern std::shared_ptr<DirectionalLight> dir_light;

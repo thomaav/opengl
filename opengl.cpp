@@ -34,13 +34,12 @@ int main(int argc, char *argv[])
 	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
 	Texture ground_texture{"textures/grass.png"};
 
-	model_shader.add_light(light);
-	ground_shader.add_light(light);
+	model_shader.add_light(point_light);
+	model_shader.add_light(dir_light);
+	ground_shader.add_light(point_light);
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;
-
-	Model cube{"models/cube/cube.obj"};
 
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
@@ -79,7 +78,7 @@ int main(int argc, char *argv[])
 		ground_shader.set_int("ground_texture", 0);
 		ground_texture.use(GL_TEXTURE0);
 
-		ground_shader.set_vec3("light_color", light->ambient);
+		ground_shader.set_vec3("light_color", point_light->ambient);
 		ground_shader.set_vec3("object_color", glm::vec3{0.75f, 0.75f, 0.75f});
 
 		main_window.reset_model();
@@ -99,14 +98,18 @@ int main(int argc, char *argv[])
 		nanosuit.draw(main_window, model_shader);
 
 		main_window.reset_model();
-		main_window.translate_model(1.0f, 0.0f, 0.0f);
-		main_window.scale_model(0.005f);
-		cube.draw(main_window, model_shader);
+		main_window.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
+					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					    nanosuit.get_transform().getOrigin().getZ());
+		main_window.scale_model(0.1f);
+		nanosuit.draw(main_window, model_shader);
 
 		main_window.reset_model();
-		main_window.translate_model(-1.0f, 0.0f, 0.0f);
-		main_window.scale_model(0.005f);
-		cube.draw(main_window, model_shader);
+		main_window.translate_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
+					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					    nanosuit.get_transform().getOrigin().getZ());
+		main_window.scale_model(0.1f);
+		nanosuit.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
