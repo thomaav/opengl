@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;
 
+	Model cube{"models/cube/cube.obj"};
+
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
 
@@ -95,6 +97,16 @@ int main(int argc, char *argv[])
 					    nanosuit.get_transform().getOrigin().getZ());
 		main_window.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
+
+		main_window.reset_model();
+		main_window.translate_model(1.0f, 0.0f, 0.0f);
+		main_window.scale_model(0.005f);
+		cube.draw(main_window, model_shader);
+
+		main_window.reset_model();
+		main_window.translate_model(-1.0f, 0.0f, 0.0f);
+		main_window.scale_model(0.005f);
+		cube.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
