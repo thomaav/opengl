@@ -58,6 +58,11 @@ namespace {
 		}
 	}
 
+	void error_cb(int error, const char *description)
+	{
+		std::cout << "Error: " << description << std::endl;
+	}
+
 	void change_lighting_dynamically(GLFWwindow *window)
 	{
 		Window *owner = (Window *) glfwGetWindowUserPointer(window);
@@ -110,6 +115,7 @@ Window::Window(bool fullscreen)
 	glfwSetMouseButtonCallback(window, click_cb);
 	glfwSetKeyCallback(window, key_cb);
 	glfwSetScrollCallback(window, scroll_cb);
+	glfwSetErrorCallback(error_cb);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
