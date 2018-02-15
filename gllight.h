@@ -16,8 +16,9 @@ public:
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
+	const std::string light_type;
 
-	Light(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+	Light(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, std::string light_type);
 	virtual ~Light();
 
 	virtual void apply(const Shader &shader, unsigned nlight);

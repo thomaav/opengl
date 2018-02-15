@@ -15,10 +15,10 @@ struct Light {
 	vec3 specular;
 };
 
-uniform Light light0;
+uniform Light pointlight0;
 
 void main()
 {
-	vec3 ambient = light0.ambient * vec3(texture(ground_texture, texture_coord));
+	vec3 ambient = pointlight0.ambient * vec3(texture(ground_texture, texture_coord));
 	fragment_color = vec4(ambient, 1.0f);
 }
