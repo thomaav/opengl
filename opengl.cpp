@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		main_window.reset_model();
 		main_window.translate_model(nanosuit.get_transform().getOrigin().getX(),
 					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					    nanosuit.get_transform().getOrigin().getZ());
+					    nanosuit.get_transform().getOrigin().getZ() - 1.0f);
 		main_window.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 

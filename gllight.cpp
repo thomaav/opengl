@@ -9,7 +9,7 @@ std::shared_ptr<PointLight> point_light = std::shared_ptr<PointLight>
 
 		glm::vec3{0.1f, 0.1f, 0.1f},
 		glm::vec3{0.8f, 0.8f, 0.8f},
-		glm::vec3{1.0f, 1.0f, 1.0f}
+		glm::vec3{0.5f, 0.5f, 0.5f}
 	});
 
 std::shared_ptr<DirectionalLight> dir_light = std::shared_ptr<DirectionalLight>
@@ -18,7 +18,7 @@ std::shared_ptr<DirectionalLight> dir_light = std::shared_ptr<DirectionalLight>
 
 		glm::vec3{0.05f, 0.05f, 0.05f},
 		glm::vec3{0.3f, 0.3f, 0.3f},
-		glm::vec3{1.0f, 1.0f, 1.0f}
+		glm::vec3{0.5f, 0.5f, 0.5f}
 	});
 
 Light::Light(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, std::string light_type)
