@@ -92,6 +92,8 @@ Window::Window(bool fullscreen)
 	: fov(45.0f)
 {
 	glfwInit();
+	glfwSetErrorCallback(error_cb);
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -115,7 +117,6 @@ Window::Window(bool fullscreen)
 	glfwSetMouseButtonCallback(window, click_cb);
 	glfwSetKeyCallback(window, key_cb);
 	glfwSetScrollCallback(window, scroll_cb);
-	glfwSetErrorCallback(error_cb);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
