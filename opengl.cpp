@@ -117,6 +117,13 @@ int main(int argc, char *argv[])
 		nanosuit.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
+		nanosuit.reset_model();
+		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 25.0f,
+					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					 nanosuit.get_transform().getOrigin().getZ());
+		nanosuit.scale_model(0.1f);
+		nanosuit.draw(main_window, model_shader);
+
 		// poll current events and swap the buffers
 		glfwPollEvents();
 		main_window.swap_buffers();

@@ -22,34 +22,46 @@ struct Light {
 uniform Light pointlight0;
 uniform Light dirlight1;
 
+vec3 diffuse_lighting(vec3 light_direction, vec3 diffuse)
+{
+	vec3 normalized_normal = normalize(normal);
+	vec3 normalized_light_dir = normalize(light_direction);
+	float diff = max(dot(normalized_normal, normalized_light_dir), 0.0f);
+	return diffuse * diff;
+}
+
+vec3 specular_lighting(vec3 light_direction, vec3 specular)
+{
+	vec3 normalized_normal = normalize(normal);
+	vec3 normalized_light_dir = normalize(-light_direction);
+	vec3 normalized_view_dir = normalize(camera_position - fragment_position);
+	vec3 normalized_reflected_view_dir = reflect(normalized_light_dir, normalized_normal);
+
+	float spec = pow(max(dot(normalized_view_dir, normalized_reflected_view_dir), 0.0f), 32.0f);
+	return specular * spec;
+}
+
 void main()
 {
-	// point light
-	vec3 ambient = pointlight0.ambient * vec3(texture(texture_diffuse1, texture_coords));
-
 	vec3 norm_normal = normalize(normal);
-	vec3 norm_light_direction = normalize(pointlight0.position - fragment_position);
-	float diff = max(dot(norm_normal, norm_light_direction), 0.0f);
-	vec3 diffuse = pointlight0.diffuse * diff * vec3(texture(texture_diffuse1, texture_coords));
 
-	vec3 norm_view_direction = normalize(camera_position - fragment_position);
-	vec3 norm_reflected_view_direction = reflect(-norm_light_direction, norm_normal);
-	float spec = pow(max(dot(norm_view_direction, norm_reflected_view_direction), 0.0f), 32.0f);
-	vec3 specular = pointlight0.specular * spec * vec3(texture(texture_specular1, texture_coords));
+	// point light
+	vec3 pointlight_direction = pointlight0.position - fragment_position;
+
+	vec3 ambient = pointlight0.ambient * vec3(texture(texture_diffuse1, texture_coords));
+	vec3 diffuse = diffuse_lighting(pointlight_direction, pointlight0.diffuse)
+		* vec3(texture(texture_diffuse1, texture_coords));
+	vec3 specular = specular_lighting(pointlight_direction, pointlight0.specular)
+		* vec3(texture(texture_diffuse1, texture_coords));
 
 	// directional light
 	vec3 dirlight_dir = normalize(-dirlight1.direction);
 
 	vec3 dir_ambient = dirlight1.ambient * vec3(texture(texture_diffuse1, texture_coords));
-
-	float dir_diff = max(dot(norm_normal, dirlight_dir), 0.0f);
-	vec3 dir_diffuse =
-		dirlight1.diffuse * dir_diff * vec3(texture(texture_diffuse1, texture_coords));
-
-	vec3 dir_reflected_view_direction = reflect(-dirlight_dir, norm_normal);
-	float dir_spec = pow(max(dot(norm_view_direction, dir_reflected_view_direction), 0.0f), 32.0f);
-	vec3 dir_specular =
-		dirlight1.specular * dir_spec * vec3(texture(texture_specular1, texture_coords));
+	vec3 dir_diffuse = diffuse_lighting(dirlight_dir, dirlight1.diffuse)
+		* vec3(texture(texture_diffuse1, texture_coords));
+	vec3 dir_specular = specular_lighting(-dirlight_dir, dirlight1.specular)
+		* vec3(texture(texture_specular1, texture_coords));
 
 	vec3 point_sum = ambient + diffuse + specular;
 	vec3 dir_sum = dir_ambient + dir_diffuse + dir_specular;
