@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
+	glm::mat4 ground_model = glm::mat4{};
 
 	//==== physics
 	World world{};
@@ -81,34 +82,34 @@ int main(int argc, char *argv[])
 		ground_shader.set_vec3("light_color", point_light->ambient);
 		ground_shader.set_vec3("object_color", glm::vec3{0.75f, 0.75f, 0.75f});
 
-		main_window.reset_model();
-		main_window.scale_model(10.0f);
-		ground_shader.set_mat4("model", main_window.model);
+		ground_model = glm::mat4{};
+		ground_model = glm::scale(ground_model, glm::vec3(10.0f, 10.0f, 10.0f));
+		ground_shader.set_mat4("model", ground_model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		//==== model
 		model_shader.use();
 
-		main_window.reset_model();
-		main_window.translate_model(nanosuit.get_transform().getOrigin().getX(),
+		nanosuit.reset_model();
+		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX(),
 					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
 					    nanosuit.get_transform().getOrigin().getZ() - 1.0f);
-		main_window.scale_model(0.1f);
+		nanosuit.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
-		main_window.reset_model();
-		main_window.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
+		nanosuit.reset_model();
+		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
 					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
 					    nanosuit.get_transform().getOrigin().getZ());
-		main_window.scale_model(0.1f);
+		nanosuit.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
-		main_window.reset_model();
-		main_window.translate_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
+		nanosuit.reset_model();
+		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
 					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
 					    nanosuit.get_transform().getOrigin().getZ());
-		main_window.scale_model(0.1f);
+		nanosuit.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers

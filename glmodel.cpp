@@ -39,6 +39,48 @@ btTransform Model::get_transform()
 	return rigid_body->getWorldTransform();
 }
 
+void Model::reset_model()
+{
+	for (auto &mesh : meshes)
+		mesh.reset_model();
+}
+
+void Model::translate_model(float x, float y, float z)
+{
+	for (auto &mesh : meshes)
+		mesh.translate_model(x, y, z);
+}
+
+void Model::translate_model(glm::vec3 translation)
+{
+	for (auto &mesh : meshes)
+		mesh.translate_model(translation);
+}
+
+void Model::rotate_model(float radians, float x, float y, float z)
+{
+	for (auto &mesh : meshes)
+		mesh.rotate_model(radians, x, y, z);
+}
+
+void Model::rotate_model(float radians, glm::vec3 rotation)
+{
+	for (auto &mesh : meshes)
+		mesh.rotate_model(radians, rotation);
+}
+
+void Model::scale_model(float x, float y, float z)
+{
+	for (auto &mesh : meshes)
+		mesh.scale_model(x, y, z);
+}
+
+void Model::scale_model(float scalar)
+{
+	for (auto &mesh : meshes)
+		mesh.scale_model(scalar);
+}
+
 void Model::draw(Window &window, Shader &shader)
 {
 	for (unsigned i = 0; i < meshes.size(); ++i) {

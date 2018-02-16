@@ -27,11 +27,46 @@ Mesh::Mesh(Mesh &&o) noexcept
 	o.EBO = 0;
 }
 
+void Mesh::reset_model()
+{
+	model = glm::mat4{};
+}
+
+void Mesh::translate_model(float x, float y, float z)
+{
+	model = glm::translate(model, glm::vec3{x, y, z});
+}
+
+void Mesh::translate_model(glm::vec3 translation)
+{
+	model = glm::translate(model, translation);
+}
+
+void Mesh::rotate_model(float radians, float x, float y, float z)
+{
+	model = glm::rotate(model, radians, glm::vec3{x, y, z});
+}
+
+void Mesh::rotate_model(float radians, glm::vec3 rotation)
+{
+	model = glm::rotate(model, radians, rotation);
+}
+
+void Mesh::scale_model(float x, float y, float z)
+{
+	model = glm::scale(model, glm::vec3{x, y, z});
+}
+
+void Mesh::scale_model(float scalar)
+{
+	model = glm::scale(model, glm::vec3(scalar, scalar, scalar));
+}
+
 void Mesh::draw(Window &window, Shader &shader)
 {
 	shader.set_mat4("projection", window.projection);
 	shader.set_mat4("view", window.view);
-	shader.set_mat4("model", window.model);
+	shader.set_mat4("model", model);
 
 	GLuint ndiffuse = 1;
 	GLuint nspecular = 1;

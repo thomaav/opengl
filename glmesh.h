@@ -28,12 +28,25 @@ public:
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
 
+	glm::mat4 model;
+
 	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
 	~Mesh();
 
 	Mesh(const Mesh &o) = delete;
 	Mesh & operator=(const Mesh &o) = delete;
 	Mesh(Mesh &&o) noexcept;
+
+	void reset_model();
+
+	void translate_model(float x, float y, float z);
+	void translate_model(glm::vec3 translation);
+
+	void rotate_model(float radians, float x, float y, float z);
+	void rotate_model(float radians, glm::vec3 rotation);
+
+	void scale_model(float x, float y, float z);
+	void scale_model(float scalar);
 
 	void draw(Window &window, Shader &shader);
 private:

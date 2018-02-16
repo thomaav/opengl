@@ -15,7 +15,6 @@ public:
 	const int width = 1920;
 	const int height = 1200;
 
-	glm::mat4 model;
 	glm::mat4 view;
 	glm::mat4 projection;
 
@@ -27,17 +26,6 @@ public:
 	void update_lighting(char color, double yoffset);
 	bool should_close();
 	void swap_buffers();
-
-	void reset_model();
-
-	void translate_model(float x, float y, float z);
-	void translate_model(glm::vec3 translation);
-
-	void rotate_model(float radians, float x, float y, float z);
-	void rotate_model(float radians, glm::vec3 rotation);
-
-	void scale_model(float x, float y, float z);
-	void scale_model(float scalar);
 
 	void toggle_mouse();
 	glm::vec3 get_camera_position();

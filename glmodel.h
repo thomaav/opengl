@@ -20,6 +20,8 @@ class Model {
 public:
 	btRigidBody *rigid_body;
 
+	glm::mat4 model;
+
 	Model(std::string path);
 	~Model();
 
@@ -28,6 +30,17 @@ public:
 
 	void init_physics();
 	btTransform get_transform();
+
+	void reset_model();
+
+	void translate_model(float x, float y, float z);
+	void translate_model(glm::vec3 translation);
+
+	void rotate_model(float radians, float x, float y, float z);
+	void rotate_model(float radians, glm::vec3 rotation);
+
+	void scale_model(float x, float y, float z);
+	void scale_model(float scalar);
 
 	void draw(Window &window, Shader &shader);
 private:
