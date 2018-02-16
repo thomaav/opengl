@@ -4,6 +4,8 @@
 
 Model::Model(std::string path)
 {
+	model = glm::mat4{};
+
 	load_model(path);
 	init_physics();
 }

@@ -41,6 +41,9 @@ int main(int argc, char *argv[])
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;
 
+	Model nanosuit_right{"models/nanosuit/nanosuit.obj"};
+	Model nanosuit_left{"models/nanosuit/nanosuit.obj"};
+
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
 	glm::mat4 ground_model = glm::mat4{};
@@ -51,6 +54,8 @@ int main(int argc, char *argv[])
 	world.set_gravity(0.0f, -9.81f, 0.0f);
 	world.physics_world->addRigidBody(ground_rigid_body);
 	world.physics_world->addRigidBody(nanosuit.rigid_body);
+	// world.physics_world->addRigidBody(nanosuit_left.rigid_body);
+	// world.physics_world->addRigidBody(nanosuit_right.rigid_body);
 
 	BulletDebugDrawer debug_drawer;
 	world.physics_world->setDebugDrawer(&debug_drawer);
@@ -93,22 +98,22 @@ int main(int argc, char *argv[])
 
 		nanosuit.reset_model();
 		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX(),
-					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					    nanosuit.get_transform().getOrigin().getZ() - 1.0f);
-		nanosuit.scale_model(0.1f);
-		nanosuit.draw(main_window, model_shader);
-
-		nanosuit.reset_model();
-		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
-					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					    nanosuit.get_transform().getOrigin().getZ());
+					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					 nanosuit.get_transform().getOrigin().getZ() - 1.0f);
 		nanosuit.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
 		nanosuit.reset_model();
 		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
-					    nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					    nanosuit.get_transform().getOrigin().getZ());
+					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					 nanosuit.get_transform().getOrigin().getZ());
+		nanosuit.scale_model(0.1f);
+		nanosuit.draw(main_window, model_shader);
+
+		nanosuit.reset_model();
+		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
+					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					 nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.scale_model(0.1f);
 		nanosuit.draw(main_window, model_shader);
 
