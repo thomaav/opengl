@@ -62,6 +62,13 @@ void Mesh::scale_model(float scalar)
 	model = glm::scale(model, glm::vec3(scalar, scalar, scalar));
 }
 
+void Mesh::move_model(float x, float y, float z)
+{
+	model[3][0] = x;
+	model[3][1] = y;
+	model[3][2] = z;
+}
+
 void Mesh::draw(Window &window, Shader &shader)
 {
 	shader.set_mat4("projection", window.projection);

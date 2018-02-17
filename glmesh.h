@@ -48,6 +48,8 @@ public:
 	void scale_model(float x, float y, float z);
 	void scale_model(float scalar);
 
+	void move_model(float x, float y, float z);
+
 	void draw(Window &window, Shader &shader);
 private:
 	GLuint VAO, VBO, EBO = 0;

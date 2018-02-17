@@ -83,6 +83,12 @@ void Model::scale_model(float scalar)
 		mesh.scale_model(scalar);
 }
 
+void Model::move_model(float x, float y, float z)
+{
+	for (auto &mesh : meshes)
+		mesh.move_model(x, y, z);
+}
+
 void Model::draw(Window &window, Shader &shader)
 {
 	for (unsigned i = 0; i < meshes.size(); ++i) {

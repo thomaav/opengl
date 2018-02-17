@@ -97,39 +97,34 @@ int main(int argc, char *argv[])
 		//==== model
 		model_shader.use();
 
-		nanosuit.reset_model();
-		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX(),
-					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					 nanosuit.get_transform().getOrigin().getZ() - 1.0f);
-		nanosuit.scale_model(0.1f);
+		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX(),
+				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getZ() - 1.0f);
 		nanosuit.draw(main_window, model_shader);
 
-		nanosuit.reset_model();
-		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
-					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					 nanosuit.get_transform().getOrigin().getZ());
-		nanosuit.scale_model(0.1f);
+		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.draw(main_window, model_shader);
 
-		nanosuit.reset_model();
-		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
-					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					 nanosuit.get_transform().getOrigin().getZ());
-		nanosuit.scale_model(0.1f);
+		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
+				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.draw(main_window, model_shader);
 
-		nanosuit.reset_model();
-		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 25.0f,
-					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					 nanosuit.get_transform().getOrigin().getZ());
-		nanosuit.scale_model(0.1f);
+		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX() + 25.0f,
+				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.draw(main_window, model_shader);
 
-		nanosuit.reset_model();
-		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 25.0f,
-					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
-					 nanosuit.get_transform().getOrigin().getZ());
-		nanosuit.scale_model(0.1f);
+		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX() + 10.0f,
+				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getZ());
+		nanosuit.draw(main_window, model_shader);
+
+		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX() + 5.0f,
+				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
+				    nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.draw(main_window, model_shader);
 
 		// poll current events and swap the buffers
