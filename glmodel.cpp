@@ -129,7 +129,7 @@ void Model::draw(Window &window, Shader &shader)
 		}
 	}
 
-	glStencilMask(0xFF);
+	glStencilMask(0x00);
 	glEnable(GL_DEPTH_TEST);
 }
 
