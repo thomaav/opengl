@@ -17,6 +17,10 @@ struct Light {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 uniform Light pointlight0;
@@ -53,6 +57,15 @@ void main()
 		* vec3(texture(texture_diffuse1, texture_coords));
 	vec3 specular = specular_lighting(pointlight_direction, pointlight0.specular)
 		* vec3(texture(texture_diffuse1, texture_coords));
+
+	float distance = length(pointlight0.position - fragment_position);
+	float attenuation = 1.0f / (pointlight0.constant +
+				    pointlight0.linear * distance +
+				    pointlight0.quadratic * pow(distance, 2.0f));
+
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
 
 	// directional light
 	vec3 dirlight_dir = normalize(-dirlight1.direction);

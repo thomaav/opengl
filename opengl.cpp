@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;
+	nanosuit.scale_model(0.1f);
 
 	Model nanosuit_right{"models/nanosuit/nanosuit.obj"};
 	Model nanosuit_left{"models/nanosuit/nanosuit.obj"};
@@ -112,6 +113,13 @@ int main(int argc, char *argv[])
 
 		nanosuit.reset_model();
 		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 1.0f,
+					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
+					 nanosuit.get_transform().getOrigin().getZ());
+		nanosuit.scale_model(0.1f);
+		nanosuit.draw(main_window, model_shader);
+
+		nanosuit.reset_model();
+		nanosuit.translate_model(nanosuit.get_transform().getOrigin().getX() + 25.0f,
 					 nanosuit.get_transform().getOrigin().getY() - 1.0f,
 					 nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.scale_model(0.1f);

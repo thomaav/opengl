@@ -71,6 +71,7 @@ PointLight::PointLight(glm::vec3 position, glm::vec3 ambient,
 		       glm::vec3 diffuse, glm::vec3 specular)
 	: Light(ambient, diffuse, specular, "pointlight")
 	, position(position)
+	, constant(1.0f), linear(0.09f), quadratic(0.032f)
 {
 	;
 }
@@ -87,4 +88,7 @@ void PointLight::apply(const Shader &shader, unsigned nlight)
 	std::string nlight_str = std::to_string(nlight);
 	std::string light_identifier = light_type + nlight_str;
 	shader.set_vec3((light_identifier + ".position").c_str(), position);
+	shader.set_float((light_identifier + ".constant").c_str(), constant);
+	shader.set_float((light_identifier + ".linear").c_str(), linear);
+	shader.set_float((light_identifier + ".quadratic").c_str(), quadratic);
 }
