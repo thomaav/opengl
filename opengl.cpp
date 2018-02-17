@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 
 	model_shader.add_light(point_light);
 	model_shader.add_light(dir_light);
+	model_shader.add_light(spot_light);
 	ground_shader.add_light(point_light);
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
@@ -72,6 +73,11 @@ int main(int argc, char *argv[])
 		//==== debug view for bullet
 		debug_drawer.SetMatrices(main_window.view, main_window.projection);
 		world.physics_world->debugDrawWorld();
+
+		//==== update camera spotlight
+		spot_light->update(main_window.get_camera_position(),
+				   main_window.get_camera_direction(),
+				   12.5f);
 
 		//==== ground
 		glBindTexture(GL_TEXTURE_2D, 0);

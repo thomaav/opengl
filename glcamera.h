@@ -17,6 +17,7 @@ public:
 	void update_position(GLFWwindow *window);
 	glm::mat4 view_mat4();
 	glm::vec3 get_position();
+	glm::vec3 get_direction();
 private:
 	bool init_scene;
 	bool mouse_enabled;

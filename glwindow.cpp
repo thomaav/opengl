@@ -250,3 +250,8 @@ glm::vec3 Window::get_camera_position()
 {
 	return camera.get_position();
 }
+
+glm::vec3 Window::get_camera_direction()
+{
+	return camera.get_direction();
+}

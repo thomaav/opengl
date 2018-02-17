@@ -111,3 +111,8 @@ glm::vec3 Camera::get_position()
 {
 	return position;
 }
+
+glm::vec3 Camera::get_direction()
+{
+	return direction;
+}

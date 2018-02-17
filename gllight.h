@@ -50,5 +50,21 @@ public:
 	virtual void apply(const Shader &shader, unsigned nlight);
 };
 
+class SpotLight : public Light {
+public:
+	glm::vec3 position;
+	glm::vec3 direction;
+	float phi;
+
+	SpotLight(glm::vec3 position, glm::vec3 direction, float phi,
+		  glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+	~SpotLight();
+
+	void update(glm::vec3 position, glm::vec3 direction, float phi);
+
+	virtual void apply(const Shader &shader, unsigned nlight);
+};
+
 extern std::shared_ptr<PointLight> point_light;
 extern std::shared_ptr<DirectionalLight> dir_light;
+extern std::shared_ptr<SpotLight> spot_light;

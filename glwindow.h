@@ -29,6 +29,7 @@ public:
 
 	void toggle_mouse();
 	glm::vec3 get_camera_position();
+	glm::vec3 get_camera_direction();
 private:
 	float fov;
 	const float max_fov = 60.0f;
