@@ -13,7 +13,8 @@ out vec4 fragment_color;
 struct Light {
 	vec3 position;
 	vec3 direction;
-	float cutoff;
+	float inner_cutoff;
+	float outer_cutoff;
 
 	vec3 ambient;
 	vec3 diffuse;
@@ -84,14 +85,19 @@ void main()
 	vec3 spot_specular = vec3(0.0f, 0.0f, 0.0f);
 
 	vec3 spotlight_direction = normalize(spotlight2.position - fragment_position);
+	spot_ambient = spotlight2.ambient * vec3(texture(texture_diffuse1, texture_coords));
+	spot_diffuse = diffuse_lighting(spotlight_direction, spotlight2.diffuse)
+		* vec3(texture(texture_diffuse1, texture_coords));
+	spot_specular = specular_lighting(spotlight_direction, spotlight2.specular)
+		* vec3(texture(texture_diffuse1, texture_coords));
+
 	float theta = dot(spotlight_direction, normalize(-spotlight2.direction));
-	if (theta > spotlight2.cutoff) {
-		spot_ambient = spotlight2.ambient * vec3(texture(texture_diffuse1, texture_coords));
-		spot_diffuse = diffuse_lighting(spotlight_direction, spotlight2.diffuse)
-			* vec3(texture(texture_diffuse1, texture_coords));
-		spot_specular = specular_lighting(spotlight_direction, spotlight2.specular)
-			* vec3(texture(texture_diffuse1, texture_coords));
-	}
+	float epsilon = spotlight2.inner_cutoff - spotlight2.outer_cutoff;
+	float intensity = clamp((theta - spotlight2.outer_cutoff) / epsilon, 0.0f, 1.0f);
+
+	spot_ambient *= intensity;
+	spot_diffuse *= intensity;
+	spot_specular *= intensity;
 
 	vec3 point_sum = ambient + diffuse + specular;
 	vec3 dir_sum = dir_ambient + dir_diffuse + dir_specular;

@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		//==== update camera spotlight
 		spot_light->update(main_window.get_camera_position(),
 				   main_window.get_camera_direction(),
-				   12.5f);
+				   12.5f, 17.5f);
 
 		//==== ground
 		glBindTexture(GL_TEXTURE_2D, 0);
