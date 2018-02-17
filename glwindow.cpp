@@ -122,6 +122,10 @@ Window::Window(bool fullscreen)
 
 	glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_STENCIL_TEST);
+	glStencilOp(GL_NOTEQUAL, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
 	// initialize 3D world settings
 	view = glm::translate(glm::mat4{}, glm::vec3(0.0f, 0.0f, -3.0f));
 	projection = glm::perspective(glm::radians(fov), (float) width / (float) height, 0.1f, 100.0f);

@@ -2,7 +2,22 @@
 
 #include "glmodel.h"
 
+Shader* Model::stencil_shader = nullptr;
+
+void Model::use_stencil(Shader *stencil_shader)
+{
+	this->stencil_shader = stencil_shader;
+	outline = true;
+}
+
+void Model::disable_stencil()
+{
+	stencil_shader = nullptr;
+	outline = false;
+}
+
 Model::Model(std::string path)
+	: outline(false)
 {
 	model = glm::mat4{};
 
@@ -91,9 +106,31 @@ void Model::move_model(float x, float y, float z)
 
 void Model::draw(Window &window, Shader &shader)
 {
+	if (stencil_shader && outline) {
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
+	} else {
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0x00);
+	}
+
 	for (unsigned i = 0; i < meshes.size(); ++i) {
 		meshes[i].draw(window, shader);
 	}
+
+	if (stencil_shader && outline) {
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+		glDisable(GL_DEPTH_TEST);
+		stencil_shader->use();
+
+		for (unsigned i = 0; i < meshes.size(); ++i) {
+			meshes[i].draw(window, *stencil_shader);
+		}
+	}
+
+	glStencilMask(0xFF);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Model::load_model(std::string path)

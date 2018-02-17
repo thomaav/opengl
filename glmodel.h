@@ -22,6 +22,11 @@ public:
 
 	glm::mat4 model;
 
+	bool outline;
+	static Shader *stencil_shader;
+	void use_stencil(Shader *stencil_shader);
+	void disable_stencil();
+
 	Model(std::string path);
 	~Model();
 

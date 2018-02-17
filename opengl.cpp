@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 	Shader ground_shader{"shaders/ground_vs.glsl", "shaders/ground_fs.glsl"};
 	Shader mesh_shader{"shaders/mesh_vs.glsl", "shaders/mesh_fs.glsl"};
 	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
+	Shader stencil_shader{"shaders/stencil_vs.glsl", "shaders/stencil_fs.glsl"};
 	Texture ground_texture{"textures/grass.png"};
 
 	model_shader.add_light(point_light);
@@ -46,6 +47,8 @@ int main(int argc, char *argv[])
 
 	Model nanosuit_right{"models/nanosuit/nanosuit.obj"};
 	Model nanosuit_left{"models/nanosuit/nanosuit.obj"};
+
+	nanosuit.use_stencil(&stencil_shader);
 
 	GLuint ground_VAO = gl_init_ground();
 	btRigidBody *ground_rigid_body = init_ground_physics();
@@ -69,7 +72,7 @@ int main(int argc, char *argv[])
 		world.physics_world->stepSimulation(1.0f / 60.0f, 10);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		//==== debug view for bullet
 		debug_drawer.SetMatrices(main_window.view, main_window.projection);
@@ -81,6 +84,7 @@ int main(int argc, char *argv[])
 				   12.5f, 17.5f);
 
 		//==== ground
+		glStencilMask(0x00);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		ground_shader.use();
