@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 	model_shader.add_light(dir_light);
 	model_shader.add_light(spot_light);
 	ground_shader.add_light(point_light);
+	ground_shader.add_light(spot_light);
 
 	Model nanosuit{"models/nanosuit/nanosuit.obj"};
 	nanosuit_ptr = &nanosuit;

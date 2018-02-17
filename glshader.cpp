@@ -132,7 +132,6 @@ void Shader::add_light(std::shared_ptr<Light> light)
 	std::string nlights = std::to_string(lights.size());
 	std::string light_identifier = "light" + nlights;
 
-	// set_vec3((light_identifier + ".position").c_str(), light->position);
 	set_vec3((light_identifier + ".ambient").c_str(), light->ambient);
 	set_vec3((light_identifier + ".diffuse").c_str(), light->diffuse);
 	set_vec3((light_identifier + ".specular").c_str(), light->specular);
