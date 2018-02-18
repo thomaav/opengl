@@ -129,6 +129,8 @@ Window::Window(bool fullscreen)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glEnable(GL_CULL_FACE);
+
 	// initialize 3D world settings
 	view = glm::translate(glm::mat4{}, glm::vec3(0.0f, 0.0f, -3.0f));
 	projection = glm::perspective(glm::radians(fov), (float) width / (float) height, 0.1f, 100.0f);
