@@ -10,6 +10,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <btBulletDynamicsCommon.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+
+#include "include/stb_image.h"
 #include "glshader.h"
 #include "gltexture.h"
 #include "glwindow.h"
@@ -20,6 +23,7 @@
 #include "glground.h"
 #include "glworld.h"
 #include "bulletdebugdrawer.h"
+#include "glskybox.h"
 
 Model *nanosuit_ptr;
 
@@ -27,12 +31,24 @@ int main(int argc, char *argv[])
 {
 	Window main_window{false};
 
+	Skybox skybox{
+		std::vector<std::string> {
+			"textures/skybox/right.jpg",
+			"textures/skybox/left.jpg",
+			"textures/skybox/top.jpg",
+			"textures/skybox/bottom.jpg",
+			"textures/skybox/front.jpg",
+			"textures/skybox/back.jpg"
+		}
+	};
+
 	Shader texture_shader{"shaders/texture_vs.glsl", "shaders/texture_fs.glsl"};
 	Shader lighting_shader{"shaders/lighting_vs.glsl", "shaders/lighting_fs.glsl"};
 	Shader ground_shader{"shaders/ground_vs.glsl", "shaders/ground_fs.glsl"};
 	Shader mesh_shader{"shaders/mesh_vs.glsl", "shaders/mesh_fs.glsl"};
 	Shader model_shader{"shaders/model_vs.glsl", "shaders/model_fs.glsl"};
 	Shader stencil_shader{"shaders/stencil_vs.glsl", "shaders/stencil_fs.glsl"};
+	Shader skybox_shader{"shaders/skybox_vs.glsl", "shaders/skybox_fs.glsl"};
 	Texture ground_texture{"textures/grass.png"};
 
 	model_shader.add_light(point_light);
@@ -84,8 +100,11 @@ int main(int argc, char *argv[])
 				   main_window.get_camera_direction(),
 				   12.5f, 17.5f);
 
-		//==== ground
+		//==== skybox
 		glStencilMask(0x00);
+		skybox.draw(skybox_shader, main_window.view, main_window.projection);
+
+		//==== ground
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		ground_shader.use();
