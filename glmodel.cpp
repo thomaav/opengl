@@ -120,7 +120,6 @@ void Model::draw(Window &window, Shader &shader)
 
 	if (stencil_shader && outline) {
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		glStencilMask(0x00);
 		glDisable(GL_DEPTH_TEST);
 		stencil_shader->use();
 

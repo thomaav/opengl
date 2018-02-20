@@ -100,11 +100,8 @@ int main(int argc, char *argv[])
 				   main_window.get_camera_direction(),
 				   12.5f, 17.5f);
 
-		//==== skybox
-		glStencilMask(0x00);
-		skybox.draw(skybox_shader, main_window.view, main_window.projection);
-
 		//==== ground
+		glStencilMask(0x00);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		ground_shader.use();
@@ -157,6 +154,9 @@ int main(int argc, char *argv[])
 				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
 				    nanosuit.get_transform().getOrigin().getZ());
 		nanosuit.draw(main_window, model_shader);
+
+		//==== skybox
+		skybox.draw(skybox_shader, main_window.view, main_window.projection);
 
 		// poll current events and swap the buffers
 		glfwPollEvents();
