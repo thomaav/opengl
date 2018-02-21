@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
 	model_shader.add_light(point_light);
 	model_shader.add_light(dir_light);
 	model_shader.add_light(spot_light);
+	model_shader.set_int("skybox", 0);
 	ground_shader.add_light(point_light);
 	ground_shader.add_light(spot_light);
 
@@ -125,10 +126,14 @@ int main(int argc, char *argv[])
 		//==== model
 		model_shader.use();
 
+		model_shader.set_bool("reflective", true);
+
 		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX(),
 				    nanosuit.get_transform().getOrigin().getY() - 1.0f,
 				    nanosuit.get_transform().getOrigin().getZ() - 1.0f);
 		nanosuit.draw(main_window, model_shader);
+
+		model_shader.set_bool("reflective", false);
 
 		nanosuit.move_model(nanosuit.get_transform().getOrigin().getX() - 1.0f,
 				    nanosuit.get_transform().getOrigin().getY() - 1.0f,

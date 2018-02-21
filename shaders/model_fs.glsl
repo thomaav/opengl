@@ -3,6 +3,7 @@ uniform vec3 camera_position;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
+uniform samplerCube skybox;
 
 in vec2 texture_coords;
 in vec3 normal;
@@ -29,6 +30,8 @@ uniform Light pointlight0;
 uniform Light dirlight1;
 uniform Light spotlight2;
 
+uniform bool reflective = false;
+
 vec3 diffuse_lighting(vec3 light_direction, vec3 diffuse)
 {
 	vec3 normalized_normal = normalize(normal);
@@ -51,6 +54,13 @@ vec3 specular_lighting(vec3 light_direction, vec3 specular)
 void main()
 {
 	vec3 norm_normal = normalize(normal);
+
+	if (reflective) {
+		vec3 I = normalize(fragment_position - camera_position);
+		vec3 R = reflect(I, normalize(normal));
+		fragment_color = vec4(texture(skybox, R).rgb, 1.0f);
+		return;
+	}
 
 	// point light
 	vec3 pointlight_direction = pointlight0.position - fragment_position;
